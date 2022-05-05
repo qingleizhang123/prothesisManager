@@ -1,0 +1,18 @@
+{
+  /*DEV_ERROR = 0,
+  DEV_WARNING = 1,
+  DEV_INFO = 2,
+  TRACE_ERROR = 3,
+  TRACE_WARNING = 4,
+  TRACE_INFO = 5,
+  SVC_ERROR = 6,
+  SVC_WARNING = 7,
+  SVC_INFO = 8,
+  PERFORMANCE = 9,*/
+  "url": "https://localhost:44351" /* The server address to accept logs. */
+  /* "source" : "webapp"              Source name. app name or use-defined for log source. Default to be 'webapp'. */
+  /* "filterTypes": [0,1,2] | "ALL",   Filter log types.  if undefined, no filter all logs; if 'ALL', filter all logs */
+  /* "consoleTypes": [0,1,2],        /* Log types be showed in console. if undefined, no logs be showed; if 'ALL', show all logs in console */
+  /* "uploadTypes": [0] /* "uploadTypes": [0,1,2] | 'ALL',          Auto timing upload types. if undefined, not logs timing-upload; if 'ALL', upload all logs */
+  /* "uploadMethod": 'GET' | 'POST',      /* Auto timing upload method. Default to be "undefined", if undefined, timing-upload logs by 'POST' Method */
+}

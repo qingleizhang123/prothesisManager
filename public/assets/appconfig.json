@@ -1,0 +1,9 @@
+{
+  "serverAPIBaseUrl": "http://localhost:44351",
+  "subStationName":"/tha/",
+  "apps": [
+    {
+      "name": "TKASurgeryPlanning"
+    }
+  ]
+}

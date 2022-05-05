@@ -1,0 +1,53 @@
+{
+  "TopLeft": [],
+  "TopRight": [],
+  "BottomLeft": [],
+  "BottomRight": [
+    {
+      "item": [
+        {
+          "tag": "00731001",
+          "name": "Scale",
+          "isDisabled": false,
+          "fontFamily": "Arial",
+          "fontSize": "12",
+          "foregroundColor": "255,255,255,255",
+          "format": "Zoom: {0:0.00}",
+          "formatType": "Double",
+          "isReadOnly": true
+        }
+      ]
+    },
+    {
+      "item": [
+        {
+          "tag": "00281051",
+          "name": "Window Width",
+          "isDisabled": false,
+          "fontFamily": "Arial",
+          "fontSize": "12",
+          "foregroundColor": "255,255,255,255",
+          "format": "WW: {0:0}",
+          "formatType": "Double",
+          "isReadOnly": false
+        },
+        {
+          "tag": "00281050",
+          "name": "Window Center",
+          "isDisabled": false,
+          "fontFamily": "Arial",
+          "fontSize": "12",
+          "foregroundColor": "255,255,255,255",
+          "format": "/WL: {0:0}",
+          "formatType": "Double",
+          "isReadOnly": false
+        }
+      ]
+    }
+  ],
+  "Top": [],
+  "Left": [],
+  "Right": [],
+  "Bottom": [],
+  "Center": []
+}
