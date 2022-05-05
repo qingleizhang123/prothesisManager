@@ -1,9 +1,13 @@
-import { createStore } from 'vuex';
+import Vuex from 'vuex';
 
-export default createStore({
-  state: {},
+export default new Vuex.Store({
+  state: {
+    currentTab: 'prothesis-list',
+  },
   getters: {},
-  mutations: {},
-  actions: {},
-  modules: {}
+  mutations: {
+    updateCurrentPage(state, currentTab) {
+      state.currentTab = currentTab;
+    },
+  },
 });

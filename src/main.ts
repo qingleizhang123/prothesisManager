@@ -32,6 +32,7 @@ import './styles/index.less';
 import 'element-plus/lib/theme-chalk/el-color-picker.css';
 import 'element-plus/lib/theme-chalk/el-slider.css';
 import ProthesisList from './components/ProthesisList.vue';
+import ProthesisModel from './components/ProthesisModel.vue';
 
 message.config({
   top: '120px',
@@ -65,6 +66,7 @@ Spin.install(app);
 Upload.install(app);
 Form.install(app);
 app.component('prothesis-list', ProthesisList);
+app.component('prothesis-model', ProthesisModel);
 app.mount('#app');
 
 router.beforeEach((to, from, next) => {

@@ -10,8 +10,12 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, computed } from 'vue';
 import Navigation from '../components/Navigation.vue';
-const currentTab = 'prothesis-list';
+import store from '../store/index';
+const currentTab = computed(() => {
+  return store.state.currentTab;
+})
 </script>
 
 <style lang="less" scoped>

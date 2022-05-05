@@ -5,7 +5,7 @@
     <a href="#">退出</a>
   </div>
   <ul>
-    <li>假体列表</li>
+    <li :class="{'select': currentTab === 'prothesis-list' }">假体列表</li>
     <li>器械列表</li>
     <li>模型商城</li>
     <li>器械分布</li>
@@ -17,7 +17,14 @@
   </ul>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
+import store from '../store/index'
+const currentTab = computed(() => {
+  return store.state.currentTab;
+})
+
+</script>
 
 <style lang="less" scoped>
 .user-content {
@@ -46,5 +53,8 @@ ul {
   li:hover {
     background: #04856f;
   }
+}
+.select {
+  background: #04856f;
 }
 </style>
