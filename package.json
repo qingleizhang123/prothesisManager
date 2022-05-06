@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "prepare": "cd .. && husky install FE/.husky"
+    "prepare": "husky install .husky"
   },
   "dependencies": {
     "@microsoft/signalr": "^5.0.8",
@@ -96,7 +96,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./FE/node_modules/cz-customizable"
+      "path": "/node_modules/cz-customizable"
     }
   }
 }

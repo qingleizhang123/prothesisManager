@@ -2,64 +2,82 @@
   <div class="register-content">
     <div class="user-interface-title">注册</div>
     <a-form
+      ref="formRef"
       :model="formState"
       v-bind="layout"
       name="nest-messages"
-      :validate-messages="validateMessages"
       @finish="onFinish"
     >
-      <a-form-item :name="['user', 'name']" label="Name" :rules="[{ required: true }]">
-        <a-input v-model:value="formState.user.name" />
+      <a-form-item :name="'username'" label="账号" :rules="[{ required: true,  message: 'Please input your username!'}]">
+        <a-input v-model:value="formState.username" />
       </a-form-item>
-      <a-form-item :name="['user', 'email']" label="Email" :rules="[{ type: 'email' }]">
-        <a-input v-model:value="formState.user.email" />
+      <a-form-item :name="'password'" label="密码" :rules="[{ required: true, message: 'Please input your password!' }]">
+        <a-input v-model:value="formState.password" />
       </a-form-item>
-      <a-form-item :name="['user', 'age']" label="Age" :rules="[{ type: 'number', min: 0, max: 99 }]">
-        <a-input-number v-model:value="formState.user.age" />
+      <a-form-item :name="'email'" label="邮箱" >
+        <a-input v-model:value="formState.email" />
       </a-form-item>
-      <a-form-item :name="['user', 'website']" label="Website">
-        <a-input v-model:value="formState.user.website" />
+      <a-form-item :name="'verifycode'" label="验证码" :rules="[{ required: true, message: 'Please input your verifycode!' }]">
+        <a-input class="verifycode-input" v-model:value="formState.verifycode"/>
+        <verify-code v-model:changeCode="identifyCode" :contentWidth="100" :contentHeight="32"></verify-code>
       </a-form-item>
-      <a-form-item :name="['user', 'introduction']" label="Introduction">
-        <a-textarea v-model:value="formState.user.introduction" />
-      </a-form-item>
-      <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+      <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
+        <a-button type="primary" html-type="submit" @click="onRegister">注册</a-button>
       </a-form-item>
     </a-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, reactive } from 'vue';
+import { ref, defineComponent, reactive } from 'vue';
+import { useRouter } from 'vue-router'
+import VerifyCode from '../components/VerifyCode.vue';
+import { accountRegister } from '@/service/login';
+import { message } from 'ant-design-vue';
+interface FormState {
+  username: string;
+  password: string;
+  email: string;
+  verifycode: string
+}
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
 };
+let identifyCode = ref('');
+const formRef = ref(null);
+const router = useRouter();
 
-const validateMessages = {
-  required: '${label} is required!',
-  types: {
-    email: '${label} is not a valid email!',
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
-};
-
-const formState = reactive({
-  user: {
-    name: '',
-    age: undefined,
-    email: '',
-    website: '',
-    introduction: '',
-  },
+const formState = reactive<FormState>({
+  username: '',
+  password: '',
+  email: '',
+  verifycode: ''
 });
-const onFinish = (values: any) => {
-  console.log('Success:', values);
-};
+
+const onRegister = () => {
+  formRef.value.validate().then(async () => {
+    if (formState.verifycode !== identifyCode.value) {
+      message.error("验证码错误");
+      return;
+    }
+    const param = {
+      userName: formState.username,
+      password: formState.password,
+      email: formState.email
+    }
+    const res: any = await accountRegister(param);
+    try {
+      if (res.code === 200) {
+        router.push('./login');
+      } else {
+        message.error('账号注册失败');
+      }
+    } catch(err) {
+       message.error('接口请求错误');
+    }
+  })
+}
 </script>
 
 <style lang="less" scoped>
@@ -70,7 +88,7 @@ const onFinish = (values: any) => {
   bottom: 0;
   left: 0;
   width: 26%;
-  height: 70%;
+  height: 60%;
   margin: auto;
   background-color: rgba(221, 230, 248, 0.18);
   border-radius: 30px;
@@ -85,5 +103,9 @@ const onFinish = (values: any) => {
     font-family: MicrosoftYaHei-Bold, inherit, sans-serif;
     text-align: center;
   }
+  .verifycode-input {
+    width: calc(100% - 100px);
+  }
 }
+
 </style>

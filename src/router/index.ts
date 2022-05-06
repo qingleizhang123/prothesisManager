@@ -30,4 +30,24 @@ const router = createRouter({
   routes,
 });
 
+// 全局导航钩子路由拦截
+/* router.beforeEach(async (to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title as string;
+  }
+  const token = localStorage.getItem('token') || '';
+  if (token) { // 已登录
+    if (!to.matched.length) {
+      next('/home');
+    }
+    next();
+  } else {
+    if (to.path === '/login') {
+      next();
+    } else {
+      next('/login');
+    }
+  }
+}); */
+
 export default router;

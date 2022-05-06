@@ -11,3 +11,14 @@ export function accountLogin(params) {
     data: params,
   });
 }
+
+// 注册
+export function accountRegister(params) {
+  const spark = new SparkMD5();
+  spark.append(params.password);
+  params.password = spark.end();
+  return request(`/user/create`, {
+    method: 'post',
+    data: params,
+  });
+}

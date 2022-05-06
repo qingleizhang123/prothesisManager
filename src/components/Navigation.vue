@@ -5,24 +5,64 @@
     <a href="#">退出</a>
   </div>
   <ul>
-    <li :class="{'select': currentTab === 'prothesis-list' }">假体列表</li>
-    <li>器械列表</li>
-    <li>模型商城</li>
-    <li>器械分布</li>
-    <li>假体管理</li>
-    <li>器械管理</li>
-    <li>用户管理</li>
-    <li>角色管理</li>
-    <li>权限管理</li>
+    <li v-for="item of navList" :key="item" :class="{'select': currentTab === item.tab}" @click="onChangeTab(item.tab)">{{ item.label }}</li>
   </ul>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
+import { EnumListType } from '../utils/const';
 import store from '../store/index'
+interface listItem {
+  type: EnumListType,
+  label: string,
+  tab: string
+}
 const currentTab = computed(() => {
   return store.state.currentTab;
 })
+
+const navList: listItem[] = [{
+  type: EnumListType.ProthesisList,
+  label: '假体列表',
+  tab: 'prothesis-list'
+},{
+  type: EnumListType.DeviceList,
+  label: '器械列表',
+  tab: 'device-list'
+},{
+  type: EnumListType.ProthesisModel,
+  label: '模型商城',
+  tab: 'prothesis-model'
+},{
+  type: EnumListType.DeviceDistribution,
+  label: '器械分布',
+  tab: 'device-distribution'
+},{
+  type: EnumListType.ProthesisManager,
+  label: '假体管理',
+  tab: 'prothesis-manager'
+},{
+  type: EnumListType.DeviceManage,
+  label: '器械管理',
+  tab: 'device-manage'
+},{
+  type: EnumListType.AccountManage,
+  label: '账号管理',
+  tab: 'account-manage'
+},{
+  type: EnumListType.RoleManage,
+  label: '角色管理',
+  tab: 'role-manage'
+},{
+  type: EnumListType.AuthorityManage,
+  label: '权限管理',
+  tab: 'authority-manage'
+}]
+
+const onChangeTab = (tab: string) => {
+  store.commit('updateCurrentPage', tab)
+}
 
 </script>
 
