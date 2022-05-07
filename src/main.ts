@@ -27,7 +27,8 @@ import {
   Spin,
   message,
   Upload,
-  Form
+  Form,
+  Tag
 } from 'ant-design-vue';
 import './styles/index.less';
 import 'element-plus/lib/theme-chalk/el-color-picker.css';
@@ -35,6 +36,7 @@ import 'element-plus/lib/theme-chalk/el-slider.css';
 import ProthesisList from './components/ProthesisList.vue';
 import ProthesisModel from './components/ProthesisModel.vue';
 import AccountManage from './components/AccountManage.vue';
+import ProthesisManage from './components/ProthesisManage.vue';
 
 message.config({
   top: '120px',
@@ -68,9 +70,11 @@ Alert.install(app);
 Spin.install(app);
 Upload.install(app);
 Form.install(app);
+Tag.install(app);
 app.component('prothesis-list', ProthesisList);
 app.component('prothesis-model', ProthesisModel);
 app.component('account-manage', AccountManage);
+app.component('prothesis-manager', ProthesisManage);
 app.mount('#app');
 
 router.beforeEach((to, from, next) => {

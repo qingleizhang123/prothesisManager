@@ -3,9 +3,10 @@
     <a-table
       style="height: 100%"
       :columns="columns"
-      :data-source="data"
+      :data-source="list"
       :pagination="{ pageSize: 20 }"
       :scroll="{ y: 605 }"
+      @change="onChangePage($event)"
       >
       <template #action>
         <a>修改</a>
@@ -30,8 +31,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, onMounted } from 'vue';
 import ProthesisModel from '../components/ProthesisModel.vue';
+import { getProthesisList, deleteProthesis } from '../service/prothesis';
 import store from '../store/index';
 const columns = [
   {
@@ -63,17 +65,43 @@ const columns = [
   },
 ];
 const visible = ref(false);
+const list = ref([]);
 
-const data = [...Array(100)].map((_, i) => ({
-  id: i + 1,
-  name: `Edward King ${i}`,
-  type: 2,
-  tag: 'feidu',
-  factory: `feidu${i}`,
-}));
+onMounted(() => {
+  getData();
+});
+
+const getData = async () => {
+  const param = {
+    page: 1,
+    pageSize: 20
+  }
+  const res: any = await getProthesisList(param);
+
+  try {
+    if (res.code === 200) {
+      const data = res.data.rows;
+      list.value = data.map((item) => ({
+        id: item.id,
+        name: item.prothesisName,
+        type: item.prothesisType,
+        factory: item.prothesisFactory,
+        tag: item.tag
+      }))
+    } else {
+      message.error('假体列表获取失败');
+    }
+  } catch(err) {
+      message.error('接口请求错误');
+  }
+}
 
 const onScanModel = () => {
   visible.value = true;
+}
+
+const onChangePage = (pagination) => {
+  console.log(pagination);
 }
 
 </script>

@@ -6,6 +6,7 @@
       :data-source="list"
       :pagination="{ pageSize: 20 }"
       :scroll="{ y: 605 }"
+      :change="onChangePage(pagination)"
       >
       <template #action="{ record }">
         <a @click="onVerify(record.userName)">审核</a>
@@ -90,7 +91,11 @@ onMounted(() => {
 })
 
 const getData = async () => {
-  const res: any = await accountList();
+  const param = {
+    page: 1,
+    pageSize: 20
+  }
+  const res: any = await accountList(param);
 
   try {
     if (res.code === 200) {
@@ -163,6 +168,10 @@ const onSubmit = () => {
        message.error('接口请求错误');
     }
   }) 
+}
+
+const onChangePage = (pagination) => {
+  console.log(pagination);
 }
 </script>
 

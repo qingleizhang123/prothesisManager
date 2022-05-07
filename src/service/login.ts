@@ -24,9 +24,10 @@ export function accountRegister(params) {
 }
 
 // 获取列表
-export function accountList() {
+export function accountList(params) {
   return request(`/user/list`, {
-    method: 'post'
+    method: 'post',
+    data: params
   });
 }
 
