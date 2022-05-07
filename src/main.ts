@@ -28,7 +28,8 @@ import {
   message,
   Upload,
   Form,
-  Tag
+  Tag,
+  Breadcrumb
 } from 'ant-design-vue';
 import './styles/index.less';
 import 'element-plus/lib/theme-chalk/el-color-picker.css';
@@ -71,6 +72,7 @@ Spin.install(app);
 Upload.install(app);
 Form.install(app);
 Tag.install(app);
+Breadcrumb.install(app);
 app.component('prothesis-list', ProthesisList);
 app.component('prothesis-model', ProthesisModel);
 app.component('account-manage', AccountManage);

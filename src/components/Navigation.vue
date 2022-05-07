@@ -8,7 +8,7 @@
     <a href="#">退出</a>
   </div>
   <ul>
-    <li v-for="item of navList" :key="item" :class="{'select': currentTab === item.tab}" @click="onChangeTab(item.tab)">{{ item.label }}</li>
+    <li v-for="item of navList" :key="item" :class="{'select': currentTab === item.tab}" @click="onChangeTab(item.tab, item.label)">{{ item.label }}</li>
   </ul>
 </template>
 
@@ -69,8 +69,9 @@ onMounted(() => {
   userName.value = localStorage.getItem('userName');
 });
 
-const onChangeTab = (tab: string) => {
-  store.commit('updateCurrentPage', tab)
+const onChangeTab = (tab: string, label: string) => {
+  store.commit('updateCurrentPage', tab);
+  store.commit('updateCurrentNavLabel', label);
 }
 
 </script>

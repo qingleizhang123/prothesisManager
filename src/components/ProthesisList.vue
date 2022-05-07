@@ -8,29 +8,28 @@
       :scroll="{ y: 605 }"
       @change="onChangePage($event)"
       >
-      <template #action>
+      <template #action="{ record }">
         <a>修改</a>
         <a-divider type="vertical" />
         <a @click="onScanModel">浏览</a>
         <a-divider type="vertical" />
-        <a>删除</a>
+        <a @click="onDelete(record.id)">删除</a>
       </template>
     </a-table>
 
-    <a-model 
-      v-model:visible="visible"
-      title="假体模型"
-      :width="1188"
-      :height="600"
-      >
-      <prothesis-model></prothesis-model>
-    </a-model>
+    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null">
+      <div style="height: 600px; width: 800px">
+        <prothesis-model></prothesis-model>
+      </div>
+      
+    </a-modal>
   </div>
     
   
 </template>
 
 <script lang="ts" setup>
+import { message } from 'ant-design-vue';
 import { ref, defineComponent, onMounted } from 'vue';
 import ProthesisModel from '../components/ProthesisModel.vue';
 import { getProthesisList, deleteProthesis } from '../service/prothesis';
@@ -104,32 +103,29 @@ const onChangePage = (pagination) => {
   console.log(pagination);
 }
 
+const onDelete = async (id: number) => {
+  const param = {
+    id: id
+  };
+  const res = await deleteProthesis(param);
+
+  try {
+    if (res.code === 200) {
+      message.success('删除成功！');
+      getData();
+    } else {
+      message.error('假体删除失败');
+    }
+  } catch(err) {
+      message.error('接口请求错误');
+  }
+}
+
 </script>
 
 <style lang="less" scoped>
 .main-content {
   height: 100%;
   width: 100%;
-}
-.ant-modal-header {
-  width: 1188px;
-}
-
-.ant-modal-body {
-  padding: 0 !important;
-  width: 1188px !important;
-  height: 530px !important;
-  padding: 32px 84px 35px 80px !important;
-}
-
-.ant-modal-content {
-  height: 800px !important;
-  width: 1188px !important;
-}
-
-.ant-modal-footer {
-  margin-top: 0px;
-  width: 1188px !important;
-  padding: 0 0 32px 0;
 }
 </style>

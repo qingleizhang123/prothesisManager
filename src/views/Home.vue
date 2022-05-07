@@ -4,6 +4,7 @@
       <navigation></navigation>
     </section>
     <section class="right">
+      <page-header></page-header>
       <component :is="currentTab"></component>
     </section>
   </div>
@@ -12,6 +13,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import Navigation from '../components/Navigation.vue';
+import PageHeader from '../components/PageHeader.vue';
 import store from '../store/index';
 const currentTab = computed(() => {
   return store.state.currentTab;

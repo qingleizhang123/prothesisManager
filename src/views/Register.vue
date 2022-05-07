@@ -7,16 +7,16 @@
       v-bind="layout"
       name="nest-messages"
     >
-      <a-form-item :name="'username'" label="账号" :rules="[{ required: true,  message: 'Please input your username!'}]">
+      <a-form-item :name="'username'" label="账号" :rules="[{ required: true,  message: '请输入您的账号名称!', trigger: 'blur'}]">
         <a-input v-model:value="formState.username" />
       </a-form-item>
-      <a-form-item :name="'password'" label="密码" :rules="[{ required: true, message: 'Please input your password!' }]">
+      <a-form-item :name="'password'" label="密码" :rules="[{ required: true, message: '请输入您的密码!', trigger: 'blur'}]">
         <a-input v-model:value="formState.password" />
       </a-form-item>
-      <a-form-item :name="'email'" label="邮箱" >
+      <a-form-item :name="'email'" label="邮箱" :rules="[{ required: true, type: 'email', message: '请输入正确的邮箱!', trigger: 'blur'}]">
         <a-input v-model:value="formState.email" />
       </a-form-item>
-      <a-form-item :name="'verifycode'" label="验证码" :rules="[{ required: true, message: 'Please input your verifycode!' }]">
+      <a-form-item :name="'verifycode'" label="验证码" :rules="[{ required: true, len: 4, message: '请输入正确的验证码!', trigger: 'blur' }]">
         <a-input class="verifycode-input" v-model:value="formState.verifycode"/>
         <verify-code v-model:changeCode="identifyCode" :contentWidth="100" :contentHeight="32"></verify-code>
       </a-form-item>

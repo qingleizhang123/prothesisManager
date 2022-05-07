@@ -9,7 +9,7 @@
       :change="onChangePage(pagination)"
       >
       <template #action="{ record }">
-        <a @click="onVerify(record.userName)">审核</a>
+        <a @click="onVerify(record.userName, record.email)">审核</a>
         <a-divider type="vertical" />
         <a @click="onDelete(record.userName)">删除</a>
       </template>
@@ -24,6 +24,7 @@
       >
         <a-form-item :name="'userName'" label="账号" :rules="[{ required: true,  message: 'Please input your username!'}]">
           <a-input disabled v-model:value="formState.userName" />
+          <a-input type="hidden" v-model:value="formState.email"></a-input>
         </a-form-item>
         <a-form-item label="审核状态" :rules="[{ required: true,  message: 'Please select verifyState!'}]">
           <a-select v-model:value="formState.verifyState">
@@ -68,7 +69,7 @@ const columns = [
   },
   {
     title: '状态',
-    dataIndex: 'state',
+    dataIndex: 'stateStr',
   },
   {
     title: '操作',
@@ -81,6 +82,7 @@ const visible = ref(false);
 
 const formState = reactive({
   userName: '',
+  email: '',
   verifyState: 0
 });
 const formRef = ref(null);
@@ -104,7 +106,8 @@ const getData = async () => {
         id: item.id,
         userName: item.userName,
         email: item.email,
-        state: getStateStrByState(item.state),
+        state: item.state,
+        stateStr: getStateStrByState(item.state),
       }))
     } else {
       message.error('账号状态更新失败');
@@ -125,9 +128,10 @@ const getStateStrByState = (state) => {
   }
 }
 
-const onVerify = (userName) => {
+const onVerify = (userName, email) => {
   visible.value = true;
-  formState.userName = userName
+  formState.userName = userName;
+  formState.email = email;
 }
 
 const onDelete = async (userName) => {
@@ -152,6 +156,7 @@ const onSubmit = () => {
   formRef.value.validate().then(async () => {
     const param = {
       userName: formState.userName,
+      email: formState.email,
       state: formState.verifyState
     }
     const res: any = await verigyAccount(param);
