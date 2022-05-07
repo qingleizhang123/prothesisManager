@@ -22,3 +22,26 @@ export function accountRegister(params) {
     data: params,
   });
 }
+
+// 获取列表
+export function accountList() {
+  return request(`/user/list`, {
+    method: 'post'
+  });
+}
+
+// 审核
+export function verigyAccount(params) {
+  return request(`/user/verify`, {
+    method: 'post',
+    data: params
+  });
+}
+
+// 删除
+export function deleteAccount(params) {
+  return request(`/user/delete`, {
+    method: 'post',
+    data: params
+  });
+}

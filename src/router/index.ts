@@ -31,7 +31,7 @@ const router = createRouter({
 });
 
 // 全局导航钩子路由拦截
-/* router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title as string;
   }
@@ -48,6 +48,6 @@ const router = createRouter({
       next('/login');
     }
   }
-}); */
+});
 
 export default router;

@@ -9,6 +9,7 @@ import {
   Radio,
   Checkbox,
   Dropdown,
+  Divider,
   Menu,
   Input,
   Select,
@@ -33,6 +34,7 @@ import 'element-plus/lib/theme-chalk/el-color-picker.css';
 import 'element-plus/lib/theme-chalk/el-slider.css';
 import ProthesisList from './components/ProthesisList.vue';
 import ProthesisModel from './components/ProthesisModel.vue';
+import AccountManage from './components/AccountManage.vue';
 
 message.config({
   top: '120px',
@@ -51,6 +53,7 @@ Menu.install(app);
 Select.install(app);
 Slider.install(app);
 DatePicker.install(app);
+Divider.install(app);
 Collapse.install(app);
 Modal.install(app);
 Radio.install(app);
@@ -67,6 +70,7 @@ Upload.install(app);
 Form.install(app);
 app.component('prothesis-list', ProthesisList);
 app.component('prothesis-model', ProthesisModel);
+app.component('account-manage', AccountManage);
 app.mount('#app');
 
 router.beforeEach((to, from, next) => {

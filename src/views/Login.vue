@@ -7,7 +7,6 @@
       v-bind="layout"
       name="normal_login"
       class="login-form"
-      @finishFailed="onFinishFailed"
     >
       <a-form-item
         label="账号"
@@ -43,8 +42,8 @@
         <a-button :disabled="disabled" style="width: 100%" type="primary" html-type="submit" class="login-form-button" @click="handleSubmit">
           登录
         </a-button>
-        Or
-        <a @click="onToRegister">注册!</a>
+        还没有账号？
+        <a @click="onToRegister">请先注册!</a>
       </a-form-item>
     </a-form>
   </div>
@@ -84,6 +83,7 @@ const handleSubmit = () => {
     }
     const res: any = await accountLogin(param);
     if (res.code === 200) {
+      localStorage.setItem('userName', formState.username);
       localStorage.setItem('token', res.token);
       router.push('./home');
     } else {
@@ -96,9 +96,6 @@ const onToRegister = () => {
   router.push('./register');
 }
 
-const onFinishFailed = (errorInfo: any) => {
-  console.log('Failed:', errorInfo);
-};
 </script>
 
 <style lang="less" scoped>

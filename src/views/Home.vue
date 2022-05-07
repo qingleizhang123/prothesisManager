@@ -28,7 +28,7 @@ const currentTab = computed(() => {
     background: #ccc;
   }
   .right {
-    padding-top: 100px;
+    padding-top: 120px;
     flex: 1;
   }
 }

@@ -1,7 +1,10 @@
 <template>
   <div class="user-content">
-    <img />
-    <span>您好！</span>
+    <img src="assets/images/avatar.jpg"/>
+    <div class="user">
+      <span class="userName">{{ userName }}</span>
+      <span style="margin-left: 5px">您好！</span>
+    </div>
     <a href="#">退出</a>
   </div>
   <ul>
@@ -10,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { EnumListType } from '../utils/const';
 import store from '../store/index'
 interface listItem {
@@ -21,6 +24,8 @@ interface listItem {
 const currentTab = computed(() => {
   return store.state.currentTab;
 })
+
+const userName = ref('');
 
 const navList: listItem[] = [{
   type: EnumListType.ProthesisList,
@@ -58,7 +63,11 @@ const navList: listItem[] = [{
   type: EnumListType.AuthorityManage,
   label: '权限管理',
   tab: 'authority-manage'
-}]
+}];
+
+onMounted(() => {
+  userName.value = localStorage.getItem('userName');
+});
 
 const onChangeTab = (tab: string) => {
   store.commit('updateCurrentPage', tab)
@@ -68,16 +77,21 @@ const onChangeTab = (tab: string) => {
 
 <style lang="less" scoped>
 .user-content {
-  height: 100px;
+  height: 120px;
   text-align: center;
   img {
     height: 50px;
     width: 50px;
     border-radius: 50%;
     display: inline-block;
+    margin: 10px;
   }
-  span {
-    display: block;
+  .user {
+    height: 20px;
+    line-height: 20px;
+    .userName {
+      color: #04856f;
+    }
   }
 }
 ul {

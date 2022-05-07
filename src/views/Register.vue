@@ -6,7 +6,6 @@
       :model="formState"
       v-bind="layout"
       name="nest-messages"
-      @finish="onFinish"
     >
       <a-form-item :name="'username'" label="账号" :rules="[{ required: true,  message: 'Please input your username!'}]">
         <a-input v-model:value="formState.username" />
@@ -22,7 +21,9 @@
         <verify-code v-model:changeCode="identifyCode" :contentWidth="100" :contentHeight="32"></verify-code>
       </a-form-item>
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
-        <a-button type="primary" html-type="submit" @click="onRegister">注册</a-button>
+        <a-button type="primary" style="width: 100%" html-type="submit" @click="onRegister">注册</a-button>
+        已有账号？
+        <a @click="onToLogin">立即登录</a>
       </a-form-item>
     </a-form>
   </div>
@@ -77,6 +78,10 @@ const onRegister = () => {
        message.error('接口请求错误');
     }
   })
+}
+
+const onToLogin = () => {
+  router.push('./login');
 }
 </script>
 
