@@ -12,16 +12,25 @@ const routes: RouteRecordRaw[] = [
     name: 'login',
     path: '/login',
     component: Login,
+    meta: {
+      title: '登陆'
+    }
   },
   {
     name: 'home',
     path: '/home',
     component: Home,
+    meta: {
+      title: '假体管理系统'
+    }
   },
   {
     name: 'register',
     path: '/register',
     component: Register,
+    meta: {
+      title: '注册'
+    }
   }
 ];
 
@@ -31,7 +40,7 @@ const router = createRouter({
 });
 
 // 全局导航钩子路由拦截
-router.beforeEach(async (to, from, next) => {
+/* router.beforeEach(async (to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title as string;
   }
@@ -48,6 +57,6 @@ router.beforeEach(async (to, from, next) => {
       next('/login');
     }
   }
-});
+}); */
 
 export default router;

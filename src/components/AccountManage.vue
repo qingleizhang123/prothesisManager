@@ -40,8 +40,8 @@
       </a-form>
     </a-modal>
   </div>
-    
-  
+
+
 </template>
 
 <script lang="ts" setup>
@@ -72,10 +72,18 @@ const columns = [
     dataIndex: 'stateStr',
   },
   {
+    title: '注册日期',
+    dataIndex: 'createDate',
+  },
+  {
+    title: '审核日期',
+    dataIndex: 'updateDate',
+  },
+  {
     title: '操作',
     key: 'operation',
     slots: { customRender: 'action' },
-    width: 400,
+    width: 200,
   },
 ];
 const visible = ref(false);
@@ -102,12 +110,15 @@ const getData = async () => {
   try {
     if (res.code === 200) {
       const data = res.data.rows;
+      const now = new Date();
       list.value = data.map((item) => ({
         id: item.id,
         userName: item.userName,
         email: item.email,
         state: item.state,
         stateStr: getStateStrByState(item.state),
+        createDate: now.toLocaleString(),
+        updateDate: now.toLocaleString()
       }))
     } else {
       message.error('账号状态更新失败');
@@ -172,7 +183,7 @@ const onSubmit = () => {
     } catch(err) {
        message.error('接口请求错误');
     }
-  }) 
+  })
 }
 
 const onChangePage = (pagination) => {

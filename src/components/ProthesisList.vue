@@ -21,11 +21,11 @@
       <div style="height: 600px; width: 800px">
         <prothesis-model></prothesis-model>
       </div>
-      
+
     </a-modal>
   </div>
-    
-  
+
+
 </template>
 
 <script lang="ts" setup>
@@ -57,10 +57,14 @@ const columns = [
     dataIndex: 'tag',
   },
   {
+    title: '假体描述',
+    dataIndex: 'description'
+  },
+  {
     title: '操作',
     key: 'operation',
     slots: { customRender: 'action' },
-    width: 400,
+    width: 200,
   },
 ];
 const visible = ref(false);
@@ -85,7 +89,8 @@ const getData = async () => {
         name: item.prothesisName,
         type: item.prothesisType,
         factory: item.prothesisFactory,
-        tag: item.tag
+        tag: item.tag,
+        description: ''
       }))
     } else {
       message.error('假体列表获取失败');

@@ -38,11 +38,11 @@ const navList: listItem[] = [{
 },{
   type: EnumListType.ProthesisModel,
   label: '模型商城',
-  tab: 'prothesis-model'
+  tab: 'prothesis-store'
 },{
   type: EnumListType.DeviceDistribution,
   label: '器械分布',
-  tab: 'device-distribution'
+  tab: 'device-distribute'
 },{
   type: EnumListType.ProthesisManager,
   label: '假体管理',

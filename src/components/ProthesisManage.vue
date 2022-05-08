@@ -1,5 +1,6 @@
 <template>
-  <div style="height: 80%; width: 60%; margin-left: 20%; padding-top:5%;border: 1px solid #ccc">
+  <div class="main-content">
+    <p>新增假体</p>
     <a-form
       ref="formRef"
       :model="formState"
@@ -53,6 +54,9 @@
           New Tag
         </a-tag>
       </a-form-item>
+      <a-form-item label="假体描述" name="desc">
+        <a-textarea v-model:value="formState.desc" />
+      </a-form-item>
       <a-form-item :wrapper-col="{ span: 14, offset: 6 }">
         <a-button type="primary" @click="onSubmit">新建</a-button>
         <a-button style="margin-left: 10px" @click="resetForm">重置</a-button>
@@ -71,6 +75,7 @@ interface FormState {
   type: number | undefined;
   factory: number | undefined;
   tags: string[];
+  desc: string
 }
 const layout = {
   labelCol: { span: 6 },
@@ -83,6 +88,7 @@ const formState: UnwrapRef<FormState> = reactive({
   type: -1,
   factory: -1,
   tags: [],
+  desc: ''
 });
 
 const state = reactive({
@@ -145,4 +151,17 @@ const resetForm = () => {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.main-content {
+  height: 80%; width: 60%;
+  margin-left: 20%;
+  padding-top:20px;
+  border: 1px solid #ccc;
+  p {
+    padding: 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+</style>
