@@ -32,7 +32,8 @@ import {
   Breadcrumb,
   Card,
   BackTop,
-  Avatar
+  Avatar,
+  TreeSelect
 } from 'ant-design-vue';
 import './styles/index.less';
 import 'element-plus/lib/theme-chalk/el-color-picker.css';
@@ -84,6 +85,7 @@ Breadcrumb.install(app);
 Card.install(app);
 BackTop.install(app);
 Avatar.install(app);
+TreeSelect.install(app);
 app.component('prothesis-list', ProthesisList);
 app.component('prothesis-model', ProthesisModel);
 app.component('account-manage', AccountManage);

@@ -23,6 +23,36 @@
       </div>
 
     </a-modal>
+
+    <button @click="addModel" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">添加模型</button>
+
+    <a-modal v-model:visible="addModelVisible" title="账号审核" :footer="null">
+      <a-form
+        ref="formRef1"
+        :model="formState"
+        v-bind="layout"
+        name="nest-messages"
+      >
+        <a-form-item :name="'model'" label="模型" :rules="[{ required: true,  message: 'Please input your model!'}]">
+          <a-input v-model:value="formState.model"></a-input>
+        </a-form-item>
+        <a-form-item label="上传路径" :rules="[{ required: true,  message: 'Please select path!'}]">
+          <a-tree-select
+            v-model:value="formState.value"
+            tree-data-simple-mode
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="treeData"
+            placeholder="Please select"
+            :load-data="onLoadData"
+          />
+        </a-form-item>
+        <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
+          <a-button type="primary" @click.prevent="onSubmit">确定</a-button>
+          <a-button style="margin-left: 10px" @click="onCancle">取消</a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 
 
@@ -30,10 +60,21 @@
 
 <script lang="ts" setup>
 import { message } from 'ant-design-vue';
-import { ref, defineComponent, onMounted } from 'vue';
+import { ref, defineComponent, onMounted, reactive } from 'vue';
 import ProthesisModel from '../components/ProthesisModel.vue';
 import { getProthesisList, deleteProthesis } from '../service/prothesis';
 import store from '../store/index';
+interface TreeDataItem {
+  id: string | number;
+  pId: number;
+  value: string;
+  title: string;
+  isLeaf?: boolean;
+}
+const layout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 14 },
+};
 const columns = [
   {
     title: '序号',
@@ -68,7 +109,20 @@ const columns = [
   },
 ];
 const visible = ref(false);
+const addModelVisible = ref(false);
+const formRef1 = ref(null);
+const formState = reactive({
+  path: '',
+  model: ''
+})
 const list = ref([]);
+
+const value = ref<string>();
+const treeData = ref<TreeDataItem[]>([
+  { id: 1, pId: 0, value: '1', title: 'Expand to load' },
+  { id: 2, pId: 0, value: '2', title: 'Expand to load' },
+  { id: 3, pId: 0, value: '3', title: 'Tree Node', isLeaf: true },
+]);
 
 onMounted(() => {
   getData();
@@ -124,6 +178,37 @@ const onDelete = async (id: number) => {
   } catch(err) {
       message.error('接口请求错误');
   }
+}
+
+const addModel = () => {
+  addModelVisible.value = true;
+}
+
+const genTreeNode = (parentId: number, isLeaf = false): TreeDataItem => {
+  const random = Math.random().toString(36).substring(2, 6);
+  return {
+    id: random,
+    pId: parentId,
+    value: random,
+    title: isLeaf ? 'Tree Node' : 'Expand to load',
+    isLeaf,
+  };
+};
+const onLoadData = (treeNode: any) => {
+  console.log(treeNode);
+  return new Promise((resolve: (value?: unknown) => void) => {
+    const { id } = treeNode.dataRef;
+    setTimeout(() => {
+      treeData.value = treeData.value.concat([genTreeNode(id, false), genTreeNode(id, true)]);
+      resolve();
+    }, 300);
+  });
+};
+
+const onSubmit = () => {
+  formRef1.value.validate().then(() => {
+    console.log(formState.model, formState.path);
+  })
 }
 
 </script>

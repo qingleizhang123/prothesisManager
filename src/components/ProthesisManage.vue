@@ -58,6 +58,23 @@
         <a-textarea v-model:value="formState.desc" />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 14, offset: 6 }">
+        <div class="clearfix">
+          <a-upload
+            list-type="picture-card"
+            v-model:file-list="fileList"
+            @preview="handlePreview"
+          >
+            <div v-if="fileList.length < 8">
+              <plus-outlined />
+              <div class="ant-upload-text">上传图片</div>
+            </div>
+          </a-upload>
+          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+            <img alt="example" style="width: 100%" :src="previewImage" />
+          </a-modal>
+        </div>
+      </a-form-item>
+      <a-form-item :wrapper-col="{ span: 14, offset: 6 }">
         <a-button type="primary" @click="onSubmit">新建</a-button>
         <a-button style="margin-left: 10px" @click="resetForm">重置</a-button>
       </a-form-item>
@@ -70,6 +87,14 @@ import { ref, reactive, toRefs, nextTick } from 'vue';
 import { PlusOutlined } from '@ant-design/icons-vue';
 import { createProthesis } from '../service/prothesis';
 import { message } from 'ant-design-vue';
+function getBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 interface FormState {
   name: string;
   type: number | undefined;
@@ -77,6 +102,23 @@ interface FormState {
   tags: string[];
   desc: string
 }
+
+interface FileItem {
+  uid: string;
+  name?: string;
+  status?: string;
+  response?: string;
+  percent?: number;
+  url?: string;
+  preview?: string;
+  originFileObj?: any;
+}
+
+interface FileInfo {
+  file: FileItem;
+  fileList: FileItem[];
+}
+
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
@@ -90,6 +132,11 @@ const formState: UnwrapRef<FormState> = reactive({
   tags: [],
   desc: ''
 });
+
+const previewVisible = ref<boolean>(false);
+const previewImage = ref<string | undefined>('');
+
+const fileList = ref<FileItem[]>([]);
 
 const state = reactive({
   inputVisible: false,
@@ -149,11 +196,25 @@ const onSubmit = () => {
 const resetForm = () => {
   formRef.value.resetFields();
 }
+
+const handleCancel = () => {
+  previewVisible.value = false;
+};
+const handlePreview = async (file: FileItem) => {
+  if (!file.url && !file.preview) {
+    file.preview = (await getBase64(file.originFileObj)) as string;
+  }
+  previewImage.value = file.url || file.preview;
+  previewVisible.value = true;
+};
+const handleChange = ({ fileList: newFileList }: FileInfo) => {
+  fileList.value = newFileList;
+};
 </script>
 
 <style lang="less" scoped>
 .main-content {
-  height: 80%; width: 60%;
+  height: 90%; width: 60%;
   margin-left: 20%;
   padding-top:20px;
   border: 1px solid #ccc;

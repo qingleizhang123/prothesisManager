@@ -6,7 +6,7 @@ export default new Vuex.Store({
     currentTab: 'prothesis-list',
     currentNavLabel: '假体列表',
     shoppingInfo: new Array<ProthesisInfo>(),
-    colletInfo: new Array<ProthesisInfo>()
+    collectInfo: new Array<ProthesisInfo>()
   },
   getters: {},
   mutations: {
@@ -20,7 +20,7 @@ export default new Vuex.Store({
       state.shoppingInfo = shoppingInfo;
     },
     updateCollecInfo(state, collectInfo) {
-      state.colletInfo = collectInfo;
+      state.collectInfo = collectInfo;
     }
   },
 });
