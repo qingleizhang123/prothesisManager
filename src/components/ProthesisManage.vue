@@ -61,10 +61,12 @@
         <div class="clearfix">
           <a-upload
             list-type="picture-card"
-            v-model:file-list="fileList"
+            v-model:file-list="files"
             @preview="handlePreview"
+            :customRequest="uploadImg"
+            @change="handleChange"
           >
-            <div v-if="fileList.length < 8">
+            <div v-if="files.length < 8">
               <plus-outlined />
               <div class="ant-upload-text">上传图片</div>
             </div>
@@ -136,7 +138,7 @@ const formState: UnwrapRef<FormState> = reactive({
 const previewVisible = ref<boolean>(false);
 const previewImage = ref<string | undefined>('');
 
-const fileList = ref<FileItem[]>([]);
+const files = ref<FileItem[]>([]);
 
 const state = reactive({
   inputVisible: false,
@@ -197,6 +199,10 @@ const resetForm = () => {
   formRef.value.resetFields();
 }
 
+const uploadImg = (file) => {
+  console.log('111');
+}
+
 const handleCancel = () => {
   previewVisible.value = false;
 };
@@ -207,8 +213,16 @@ const handlePreview = async (file: FileItem) => {
   previewImage.value = file.url || file.preview;
   previewVisible.value = true;
 };
-const handleChange = ({ fileList: newFileList }: FileInfo) => {
-  fileList.value = newFileList;
+const handleChange = ({ file, fileList }: FileInfo) => {
+  const status = file.status
+  if (status !== 'uploading') {
+  }
+  if (status === 'done') {
+    // this.videoUrlList.push({ uid: fileList[fileList.length - 1].uid, url: info.file.response.data.url })
+  }
+  fileList.forEach(file => { file.status = 'done'});
+  console.log(fileList);
+  files.value = [...fileList] //重点
 };
 </script>
 

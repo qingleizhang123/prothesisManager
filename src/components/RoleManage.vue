@@ -3,7 +3,7 @@
     <a-table
       style="height: 100%"
       :columns="columns"
-      :data-source="data"
+      :data-source="list"
       :pagination="{ pageSize: 20 }"
       :scroll="{ y: 605 }"
       :change="onChangePage(pagination)"
@@ -17,13 +17,22 @@
 
     <a-modal v-model:visible="visible" title="新增角色" :footer="null">
       <a-form
-        ref="formRef"
+        ref="roleformRef"
         :model="formState"
         v-bind="layout"
         name="nest-messages"
       >
-        <a-form-item :name="'roleName'" label="角色" :rules="[{ required: true,  message: 'Please input your username!'}]">
+        <a-form-item :name="'roleName'" label="角色" :rules="[{ required: true,  message: 'Please input your rolename!'}]">
           <a-input v-model:value="formState.roleName" />
+        </a-form-item>
+        <a-form-item :name="'roleText'" label="文本" :rules="[{ required: true,  message: 'Please input your roletext!'}]">
+          <a-select v-model:value="formState.roleText">
+            <a-select-option value="普通用户">普通用户</a-select-option>
+            <a-select-option value="开发">开发</a-select-option>
+            <a-select-option value="测试">测试</a-select-option>
+            <a-select-option value="管理员">管理员</a-select-option>
+            <a-select-option value="超级管理员">超级管理员</a-select-option>
+          </a-select>
         </a-form-item>
         <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
           <a-button type="primary" @click.prevent="onSubmit">确定</a-button>
@@ -33,13 +42,12 @@
     </a-modal>
   </div>
 
-
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue';
 import store from '../store/index';
-import { accountList,verigyAccount, deleteAccount } from '../service/login';
+import { getRoleList, createRole, deleteRole } from '../service/role';
 import { message } from 'ant-design-vue';
 const layout = {
   labelCol: { span: 6 },
@@ -51,12 +59,12 @@ const columns = [
     dataIndex: 'id',
   },
   {
-    title: '角色',
+    title: '角色名称',
     dataIndex: 'roleName',
   },
   {
     title: '创建日期',
-    dataIndex: 'createDate',
+    dataIndex: 'createdAt',
   },
   {
     title: '操作',
@@ -68,23 +76,39 @@ const columns = [
 const visible = ref(false);
 
 const formState = reactive({
-  roleName: ''
+  roleName: '',
+  roleText: ''
 });
-const formRef = ref(null);
+const roleformRef = ref(null);
 const list = ref([]);
 
 onMounted(() => {
   getData();
 })
 
-const now = new Date();
-const data = [...Array(100)].map((_, i) => ({
-  id: i,
-  roleName: '普通用户',
-  createDate: now.toLocaleString()
-}));
-
 const getData = async () => {
+    const param = {
+    page: 1,
+    pageSize: 20
+  }
+
+    const res = await getRoleList(param);
+
+    try {
+      if (res.code === 200) {
+        const data = res.data.rows;
+        list.value = data.map(item => ({
+          id: item.id,
+          roleName: item.roleName,
+          roleText: item.roleText,
+          createdAt: createdAt
+        }));
+      } else {
+        message.error('接口请求错误！');
+      }
+    } catch (err) {
+      message.error('接口请求错误');
+    }
 }
 
 const getStateStrByState = (state) => {
@@ -102,18 +126,18 @@ const onAddRole = () => {
   visible.value = true;
 }
 
-const onDelete = async (id) => {
+const onDelete = async (roleName) => {
   const param = {
-    id: id
+    roleName: roleName
   }
-  const res: any = await deleteAccount(param);
+  const res: any = await deleteRole(param);
 
   try {
     if (res.code === 200) {
-      message.success(`账号${id}删除成功！`);
+      message.success(`${roleName}角色删除成功！`);
       getData();
     } else {
-      message.error('账号删除失败');
+      message.error('角色删除失败');
     }
   } catch(err) {
     message.error('接口请求错误');
@@ -123,17 +147,18 @@ const onDelete = async (id) => {
 const onSubmit = () => {
   formRef.value.validate().then(async () => {
     const param = {
-      userName: formState.roleName,
+      roleName: formState.roleName,
+      roleText: formState.roleText
     }
-    const res: any = await verigyAccount(param);
+    const res: any = await createRole(param);
 
     try {
       if (res.code === 200) {
-        message.success(`角色${formState.roleName}创建成功`);
+        message.success(`${formState.roleName}角色创建成功`);
         visible.value = false;
         getData();
       } else {
-        message.error(`角色${formState.roleName}创建成功`);
+        message.error(`${formState.roleName}角色创建失败`);
       }
     } catch(err) {
        message.error('接口请求错误');

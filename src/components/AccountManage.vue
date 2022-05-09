@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content">
+  <div class="main-content" ref="accountManage">
     <a-table
       style="height: 100%"
       :columns="columns"
@@ -15,7 +15,7 @@
       </template>
     </a-table>
 
-    <a-modal v-model:visible="visible" title="账号审核" :footer="null">
+    <a-modal v-model:visible="visible" title="账号审核" :footer="null" :get-container="() => accountManage">
       <a-form
         ref="formRef"
         :model="formState"
@@ -86,6 +86,7 @@ const columns = [
     width: 200,
   },
 ];
+const accountManage = ref(null);
 const visible = ref(false);
 
 const formState = reactive({
@@ -195,5 +196,8 @@ const onChangePage = (pagination) => {
 .main-content {
   height: 100%;
   width: 100%;
+  :deep(.ant-modal-body) {
+    padding: 24px;
+  }
 }
 </style>

@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 const Login = () => import('../views/Login.vue');
 const Home = () => import('../views/Home.vue');
@@ -13,7 +15,8 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     component: Login,
     meta: {
-      title: '登陆'
+      title: '登陆',
+      btnPermissions: ['admin', 'supper', 'normal']
     }
   },
   {
@@ -21,7 +24,8 @@ const routes: RouteRecordRaw[] = [
     path: '/home',
     component: Home,
     meta: {
-      title: '假体管理系统'
+      title: '假体管理系统',
+      btnPermissions: ['admin', 'supper']
     }
   },
   {
@@ -29,10 +33,13 @@ const routes: RouteRecordRaw[] = [
     path: '/register',
     component: Register,
     meta: {
-      title: '注册'
+      title: '注册',
+      btnPermissions: ['admin', 'supper', 'normal']
     }
   }
 ];
+
+NProgress.configure({ showSpinner: false });
 
 const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
@@ -40,7 +47,8 @@ const router = createRouter({
 });
 
 // 全局导航钩子路由拦截
-/* router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  NProgress.start();
   if (to.meta.title) {
     document.title = to.meta.title as string;
   }
@@ -48,6 +56,7 @@ const router = createRouter({
   if (token) { // 已登录
     if (!to.matched.length) {
       next('/home');
+      NProgress.done();
     }
     next();
   } else {
@@ -55,8 +64,13 @@ const router = createRouter({
       next();
     } else {
       next('/login');
+      NProgress.done();
     }
   }
-}); */
+});
+
+router.afterEach(() => {
+  NProgress.done();
+});
 
 export default router;

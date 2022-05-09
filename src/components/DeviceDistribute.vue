@@ -3,7 +3,7 @@
     <div class="left-region">
       <a-row :gutter="16">
         <a-col :span="8" v-for="item of arr" :key="item">
-          <a-card hoverable >
+          <a-card hoverable>
             <template #cover>
               <div id="echart-main" class="echarts-container" style="height: 200px;width: 100%; padding: 10px">
               </div>

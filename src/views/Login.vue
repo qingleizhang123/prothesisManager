@@ -84,6 +84,7 @@ const handleSubmit = () => {
     const res: any = await accountLogin(param);
     if (res.code === 200) {
       localStorage.setItem('userName', formState.username);
+      localStorage.setItem('roles', 'normal');
       localStorage.setItem('token', res.token);
       router.push('./home');
     } else {

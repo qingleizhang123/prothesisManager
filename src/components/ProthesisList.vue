@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content">
+  <div class="main-content" ref="prothesisListRef">
     <a-table
       style="height: 100%"
       :columns="columns"
@@ -17,16 +17,16 @@
       </template>
     </a-table>
 
-    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null">
+    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null" :get-container="prothesisListRef">
       <div style="height: 600px; width: 800px">
         <prothesis-model></prothesis-model>
       </div>
 
     </a-modal>
 
-    <button @click="addModel" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">添加模型</button>
+    <button v-drag @click="addModel" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">添加模型</button>
 
-    <a-modal v-model:visible="addModelVisible" title="账号审核" :footer="null">
+    <a-modal v-model:visible="addModelVisible" title="账号审核" :footer="null" :get-container="prothesisListRef">
       <a-form
         ref="formRef1"
         :model="formState"
@@ -55,7 +55,6 @@
     </a-modal>
   </div>
 
-
 </template>
 
 <script lang="ts" setup>
@@ -71,6 +70,7 @@ interface TreeDataItem {
   title: string;
   isLeaf?: boolean;
 }
+const prothesisListRef = ref(null);
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
@@ -217,5 +217,8 @@ const onSubmit = () => {
 .main-content {
   height: 100%;
   width: 100%;
+  :deep(.model-wrapper .ant-modal-body) {
+    padding: 0;
+  }
 }
 </style>
