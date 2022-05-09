@@ -62,7 +62,7 @@ const navList: listItem[] = [{
 },{
   type: EnumListType.AuthorityManage,
   label: '权限管理',
-  tab: 'authority-manage'
+  tab: 'permission-manage'
 }];
 
 onMounted(() => {

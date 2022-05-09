@@ -47,6 +47,7 @@ import DeviceDistribute from './components/DeviceDistribute.vue';
 import ProthesisStore from './components/ProthesisStore.vue';
 import DeviceList from './components/DeviceList.vue';
 import DeviceManage from './components/DeviceManage.vue';
+import PermissionManage from './components/PermissionManage.vue';
 import Directives from '@/directive/index';
 
 message.config({
@@ -97,4 +98,5 @@ app.component('device-distribute', DeviceDistribute);
 app.component('prothesis-store', ProthesisStore);
 app.component('device-list', DeviceList);
 app.component('device-manage', DeviceManage);
+app.component('permission-manage',PermissionManage);
 app.mount('#app');

@@ -123,23 +123,4 @@ const onToRegister = () => {
     text-align: center;
   }
 }
-
-#components-form-demo-normal-login .login-form {
-  max-width: 300px;
-}
-#components-form-demo-normal-login .login-form-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-#components-form-demo-normal-login .login-form-forgot {
-  margin-bottom: 24px;
-}
-#components-form-demo-normal-login .login-form-button {
-  width: 100%;
-}
-
-:deep(ant-form-item-label) {
-  width: 40px;
-}
 </style>
