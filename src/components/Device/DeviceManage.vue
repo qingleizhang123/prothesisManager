@@ -65,7 +65,7 @@
 <script lang="ts" setup>
 import { ref, reactive, toRefs, nextTick } from 'vue';
 import { PlusOutlined } from '@ant-design/icons-vue';
-import { createProthesis } from '../service/prothesis';
+import { createDevice } from '../../service/device';
 import { message } from 'ant-design-vue';
 interface FormState {
   name: string;
@@ -126,16 +126,17 @@ const onSubmit = () => {
       name: formState.name,
       type: formState.type,
       factory: formState.factory,
-      tag: formState.tags.join(',')
+      tag: formState.tags.join(','),
+      desc: formState.desc
     }
 
-    const res = await createProthesis(param);
+    const res = await createDevice(param);
 
     try {
       if (res.code === 200) {
-        message.success(`假体${formState.name}新建成功`);
+        message.success(`器械${formState.name}新建成功`);
       } else {
-        message.error('假体新建失败');
+        message.error('器械新建失败');
       }
     } catch(err) {
        message.error('接口请求错误');

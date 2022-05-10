@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
-import { showTime } from '../utils/showTime';
+import { showTime } from '../../utils/showTime';
 const searchValue = ref('');
 const time = ref(showTime());
 

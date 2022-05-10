@@ -28,6 +28,22 @@
           <a-select-option :value="2">捷迈</a-select-option>
         </a-select>
       </a-form-item>
+      <a-form-item label="假体装配点" name="assembly" :rules="[{ required: true, message: 'Please input your assembly!' }]">
+        <a-input v-model:value="formState.assembly" placeholder="请输入装配点坐标,x,y,z逗号隔开"></a-input>
+        <!-- <div style="display:inline-block;width:33%">
+          <label>x：</label>
+          <a-input style="width:85%"></a-input>
+        </div>
+        <div style="display:inline-block;width:33%">
+          <label>y：</label>
+          <a-input style="width:85%"></a-input>
+        </div>
+        <div style="display:inline-block;width:33%">
+          <label>z：</label>
+          <a-input style="width:85%"></a-input>
+        </div> -->
+
+      </a-form-item>
       <a-form-item label="标签" name="tag">
         <template v-for="(tag, index) in formState.tags" :key="tag">
           <a-tooltip v-if="tag.length > 20" :title="tag">
@@ -87,7 +103,7 @@
 <script lang="ts" setup>
 import { ref, reactive, toRefs, nextTick } from 'vue';
 import { PlusOutlined } from '@ant-design/icons-vue';
-import { createProthesis } from '../service/prothesis';
+import { createProthesis } from '../../service/prothesis';
 import { message } from 'ant-design-vue';
 function getBase64(file: File) {
   return new Promise((resolve, reject) => {
@@ -102,7 +118,9 @@ interface FormState {
   type: number | undefined;
   factory: number | undefined;
   tags: string[];
-  desc: string
+  desc: string;
+  assembly: string;
+  path: string;
 }
 
 interface FileItem {
@@ -132,7 +150,8 @@ const formState: UnwrapRef<FormState> = reactive({
   type: -1,
   factory: -1,
   tags: [],
-  desc: ''
+  desc: '',
+  assembly: ''
 });
 
 const previewVisible = ref<boolean>(false);
@@ -178,7 +197,11 @@ const onSubmit = () => {
       name: formState.name,
       type: formState.type,
       factory: formState.factory,
-      tag: formState.tags.join(',')
+      tag: formState.tags.join(','),
+      assembly: formState.assembly,
+      desc: formState.desc,
+      file: files.value[0],
+      fileName: files.value[0].name
     }
 
     const res = await createProthesis(param);

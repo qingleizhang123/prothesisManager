@@ -41,13 +41,12 @@
     </a-modal>
   </div>
 
-
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, defineComponent, onMounted } from 'vue';
-import store from '../store/index';
-import { accountList,verigyAccount, deleteAccount } from '../service/login';
+import store from '../../store/index';
+import { accountList,verigyAccount, deleteAccount } from '../../service/login';
 import { message } from 'ant-design-vue';
 const layout = {
   labelCol: { span: 6 },

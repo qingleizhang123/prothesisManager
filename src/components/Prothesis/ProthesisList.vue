@@ -1,9 +1,9 @@
 <template>
-  <div class="main-content" ref="permissionRef">
+  <div class="main-content" ref="prothesisListRef">
     <a-table
       style="height: 100%"
       :columns="columns"
-      :data-source="data"
+      :data-source="list"
       :pagination="{ pageSize: 20 }"
       :scroll="{ y: 605 }"
       @change="onChangePage($event)"
@@ -17,12 +17,42 @@
       </template>
     </a-table>
 
-    <a-modal wrapClassName="model-wrapper" title="新增菜单配置" v-model:visible="visible" :closable="false" :footer="null" :get-container="permissionRef">
-      <menu-config></menu-config>
+    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null" :get-container="prothesisListRef">
+      <div style="height: 600px; width: 800px">
+        <prothesis-model></prothesis-model>
+      </div>
+
     </a-modal>
 
     <button v-drag @click="addModel" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">添加模型</button>
 
+    <a-modal v-model:visible="addModelVisible" title="账号审核" :footer="null" :get-container="prothesisListRef">
+      <a-form
+        ref="formRef1"
+        :model="formState"
+        v-bind="layout"
+        name="nest-messages"
+      >
+        <a-form-item :name="'model'" label="模型" :rules="[{ required: true,  message: 'Please input your model!'}]">
+          <a-input v-model:value="formState.model"></a-input>
+        </a-form-item>
+        <a-form-item label="上传路径" :rules="[{ required: true,  message: 'Please select path!'}]">
+          <a-tree-select
+            v-model:value="formState.value"
+            tree-data-simple-mode
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="treeData"
+            placeholder="Please select"
+            :load-data="onLoadData"
+          />
+        </a-form-item>
+        <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
+          <a-button type="primary" @click.prevent="onSubmit">确定</a-button>
+          <a-button style="margin-left: 10px" @click="onCancle">取消</a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 
 </template>
@@ -30,9 +60,9 @@
 <script lang="ts" setup>
 import { message } from 'ant-design-vue';
 import { ref, defineComponent, onMounted, reactive } from 'vue';
-import MenuConfig from '../components/MenuConfig.vue';
-import { getProthesisList, deleteProthesis } from '../service/prothesis';
-import store from '../store/index';
+import ProthesisModel from './ProthesisModel.vue';
+import { getProthesisList, deleteProthesis } from '../../service/prothesis';
+import store from '../../store/index';
 interface TreeDataItem {
   id: string | number;
   pId: number;
@@ -48,34 +78,38 @@ const layout = {
 const columns = [
   {
     title: '序号',
-    dataIndex: 'id',
+    dataIndex: 'index',
     width: 150,
   },
   {
-    title: '菜单',
-    dataIndex: 'menu',
+    title: '假体名称',
+    dataIndex: 'name',
   },
   {
-    title: '一级子菜单',
-    dataIndex: 'submenu',
+    title: '假体类型',
+    dataIndex: 'type',
   },
   {
-    title: '路由配置',
-    dataIndex: 'path',
+    title: '假体厂商',
+    dataIndex: 'factory',
   },
   {
-    title: '组件名称',
-    dataIndex: 'component'
+    title: '假体装配点',
+    dataIndex: 'assembly'
   },
   {
-    title: '权限组',
-    dataIndex: 'permissionGroup'
+    title: '标签',
+    dataIndex: 'tag',
+  },
+  {
+    title: '假体描述',
+    dataIndex: 'description'
   },
   {
     title: '操作',
     key: 'operation',
     slots: { customRender: 'action' },
-    width: 200,
+    width: 300,
   },
 ];
 const visible = ref(false);
@@ -87,14 +121,6 @@ const formState = reactive({
 })
 const list = ref([]);
 
-const data =  [...Array(100)].map((_,i) => ({
-  id: i,
-  menu: '登陆',
-  submenu: '',
-  path: './login',
-  component: 'Login',
-  permissionGroup: 'admin,normal'
-}))
 const value = ref<string>();
 const treeData = ref<TreeDataItem[]>([
   { id: 1, pId: 0, value: '1', title: 'Expand to load' },
@@ -116,13 +142,15 @@ const getData = async () => {
   try {
     if (res.code === 200) {
       const data = res.data.rows;
-      list.value = data.map((item) => ({
+      list.value = data.map((item, i) => ({
+        index: i + 1,
         id: item.id,
         name: item.prothesisName,
         type: item.prothesisType,
         factory: item.prothesisFactory,
         tag: item.tag,
-        description: ''
+        description: item.description,
+        assembly: item.assemblyPoint
       }))
     } else {
       message.error('假体列表获取失败');
@@ -159,7 +187,7 @@ const onDelete = async (id: number) => {
 }
 
 const addModel = () => {
-  visible.value = true;
+  addModelVisible.value = true;
 }
 
 const genTreeNode = (parentId: number, isLeaf = false): TreeDataItem => {
@@ -195,5 +223,8 @@ const onSubmit = () => {
 .main-content {
   height: 100%;
   width: 100%;
+  :deep(.model-wrapper .ant-modal-body) {
+    padding: 0;
+  }
 }
 </style>

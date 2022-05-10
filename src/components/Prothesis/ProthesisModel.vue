@@ -27,6 +27,7 @@ const init = () => {
   loadSTL() // 加载STL模型
   createLight() // 创建光源
   createCamera() // 创建相机
+  createGrid() // 创建网格
   createRender() // 创建渲染器
   createControls() // 创建控件对象
   render() // 渲染
@@ -54,7 +55,7 @@ const loadSTL = () => {
 // 创建光源
 const createLight = () => {
   // 环境光
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.1) // 创建环境光
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2) // 创建环境光
   scene.add(ambientLight) // 将环境光添加到场景
 
   const spotLight = new THREE.SpotLight(0xffffff) // 创建聚光灯
@@ -75,6 +76,17 @@ const createCamera = () => {
 
   camera.lookAt(new THREE.Vector3(10, 40, 0)) // 设置相机方向
   scene.add(camera)
+
+  
+}
+
+// 创建底部网格
+const createGrid = () => {
+  const gridHelper = new THREE.GridHelper(2000, 100, 0x888888, 0x888888);
+  gridHelper.position.x=0;
+  gridHelper.position.y=-22;
+  gridHelper.position.z=0;
+  scene.add(gridHelper);
 }
 
 // 创建渲染器

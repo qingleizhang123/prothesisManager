@@ -38,16 +38,16 @@ import {
 import './styles/index.less';
 import 'element-plus/lib/theme-chalk/el-color-picker.css';
 import 'element-plus/lib/theme-chalk/el-slider.css';
-import ProthesisList from './components/ProthesisList.vue';
-import ProthesisModel from './components/ProthesisModel.vue';
-import AccountManage from './components/AccountManage.vue';
-import ProthesisManage from './components/ProthesisManage.vue';
-import RoleManage from './components/RoleManage.vue';
-import DeviceDistribute from './components/DeviceDistribute.vue';
-import ProthesisStore from './components/ProthesisStore.vue';
-import DeviceList from './components/DeviceList.vue';
-import DeviceManage from './components/DeviceManage.vue';
-import PermissionManage from './components/PermissionManage.vue';
+import ProthesisList from './components/Prothesis/ProthesisList.vue';
+import ProthesisModel from './components/Prothesis/ProthesisModel.vue';
+import AccountManage from './components/AccountManage/AccountManage.vue';
+import ProthesisManage from './components/Prothesis/ProthesisManage.vue';
+import RoleManage from './components/RoleManage/RoleManage.vue';
+import DeviceDistribute from './components/Device/DeviceDistribute.vue';
+import ProthesisStore from './components/Prothesis/ProthesisStore.vue';
+import DeviceList from './components/Device/DeviceList.vue';
+import DeviceManage from './components/Device/DeviceManage.vue';
+import PermissionManage from './components/PermissionManage/PermissionManage.vue';
 import Directives from '@/directive/index';
 
 message.config({
@@ -98,5 +98,5 @@ app.component('device-distribute', DeviceDistribute);
 app.component('prothesis-store', ProthesisStore);
 app.component('device-list', DeviceList);
 app.component('device-manage', DeviceManage);
-app.component('permission-manage',PermissionManage);
+app.component('permission-manage', PermissionManage);
 app.mount('#app');

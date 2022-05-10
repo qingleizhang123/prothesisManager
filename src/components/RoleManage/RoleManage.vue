@@ -42,12 +42,14 @@
     </a-modal>
   </div>
 
+  <button v-drag @click="onAddRole" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">新增角色</button>
+
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue';
-import store from '../store/index';
-import { getRoleList, createRole, deleteRole } from '../service/role';
+import store from '../../store/index';
+import { getRoleList, createRole, deleteRole } from '../../service/role';
 import { message } from 'ant-design-vue';
 const layout = {
   labelCol: { span: 6 },
@@ -56,11 +58,15 @@ const layout = {
 const columns = [
   {
     title: '序号',
-    dataIndex: 'id',
+    dataIndex: 'index',
   },
   {
     title: '角色名称',
     dataIndex: 'roleName',
+  },
+  {
+    title: '角色说明',
+    dataIndex: 'roleText',
   },
   {
     title: '创建日期',
@@ -97,11 +103,12 @@ const getData = async () => {
     try {
       if (res.code === 200) {
         const data = res.data.rows;
-        list.value = data.map(item => ({
+        list.value = data.map((item, i) => ({
+          index: i + 1,
           id: item.id,
           roleName: item.roleName,
           roleText: item.roleText,
-          createdAt: createdAt
+          createdAt: new Date(item.createdAt).toLocaleString()
         }));
       } else {
         message.error('接口请求错误！');
@@ -145,7 +152,7 @@ const onDelete = async (roleName) => {
 }
 
 const onSubmit = () => {
-  formRef.value.validate().then(async () => {
+  roleformRef.value.validate().then(async () => {
     const param = {
       roleName: formState.roleName,
       roleText: formState.roleText

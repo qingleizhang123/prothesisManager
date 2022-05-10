@@ -11,18 +11,9 @@
       <template #action="{ record }">
         <a>修改</a>
         <a-divider type="vertical" />
-        <a @click="onScanModel">浏览</a>
-        <a-divider type="vertical" />
         <a @click="onDelete(record.id)">删除</a>
       </template>
     </a-table>
-
-    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null">
-      <div style="height: 600px; width: 800px">
-        <prothesis-model></prothesis-model>
-      </div>
-
-    </a-modal>
   </div>
 
 
@@ -31,13 +22,12 @@
 <script lang="ts" setup>
 import { message } from 'ant-design-vue';
 import { ref, defineComponent, onMounted } from 'vue';
-import ProthesisModel from '../components/ProthesisModel.vue';
-import { getProthesisList, deleteProthesis } from '../service/prothesis';
-import store from '../store/index';
+import { getDeviceList, deleteDevice } from '../../service/device';
+import store from '../../store/index';
 const columns = [
   {
     title: '序号',
-    dataIndex: 'id',
+    dataIndex: 'index',
     width: 150,
   },
   {
@@ -83,18 +73,19 @@ const getData = async () => {
     page: 1,
     pageSize: 20
   }
-  const res: any = await getProthesisList(param);
+  const res: any = await getDeviceList(param);
 
   try {
     if (res.code === 200) {
       const data = res.data.rows;
-      list.value = data.map((item) => ({
+      list.value = data.map((item, i) => ({
+        index: i + 1,
         id: item.id,
-        name: item.prothesisName,
-        type: item.prothesisType,
-        factory: item.prothesisFactory,
+        name: item.deviceName,
+        type: item.deviceType,
+        factory: item.deviceFactory,
         tag: item.tag,
-        description: '',
+        description: item.description,
         storeAccount: 100
       }))
     } else {
@@ -117,14 +108,14 @@ const onDelete = async (id: number) => {
   const param = {
     id: id
   };
-  const res = await deleteProthesis(param);
+  const res = await deleteDevice(param);
 
   try {
     if (res.code === 200) {
       message.success('删除成功！');
       getData();
     } else {
-      message.error('假体删除失败');
+      message.error('器械删除失败');
     }
   } catch(err) {
       message.error('接口请求错误');

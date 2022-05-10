@@ -21,7 +21,7 @@
       </a-col>
     </a-row>
 
-    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null">
+    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null" :get-container="store-main">
       <div style="height: 600px; width: 800px">
         <prothesis-model></prothesis-model>
       </div>
@@ -35,8 +35,8 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import { EyeOutlined, ShoppingCartOutlined, StarOutlined } from '@ant-design/icons-vue';
-import BlockSidebar from './BlockSidebar.vue';
-import store from '../store/index';
+import BlockSidebar from '../BlockSidebar.vue';
+import store from '../../store/index';
 const visible = ref(false);
 const arr = ['假体1','假体2','假体3','假体4','假体5','假体6','假体7','假体8','假体1','假体2','假体3','假体4','假体5','假体6','假体7','假体8'];
 const shoppingInfo = computed(() => {
@@ -67,5 +67,8 @@ const onAddCollect = (item) => {
   padding: 0 20px;
   overflow-y: auto;
   overflow-x: hidden;
+  :deep(.ant-modal-body) {
+    padding: 0px;
+  }
 }
 </style>
