@@ -9,6 +9,8 @@
       :change="onChangePage(pagination)"
       >
       <template #action="{ record }">
+        <a @click="onEdit(record.userName, record.email)">修改</a>
+        <a-divider type="vertical" />
         <a @click="onVerify(record.userName, record.email)">审核</a>
         <a-divider type="vertical" />
         <a @click="onDelete(record.userName)">删除</a>
@@ -39,6 +41,36 @@
         </a-form-item>
       </a-form>
     </a-modal>
+
+    <a-modal v-model:visible="editAccountVisible" title="账号修改" :footer="null" :get-container="() => accountManage">
+      <a-form
+        ref="accountFormRef"
+        :model="accountFormState"
+        v-bind="layout"
+        name="edit-account"
+      >
+        <a-form-item :name="'userName'" label="账号" :rules="[{ required: true,  message: 'Please input your username!'}]">
+          <a-input v-model:value="accountFormState.userName" />
+        </a-form-item>
+        <a-form-item label="角色" :rules="[{ required: true,  message: 'Please select role!'}]">
+          <a-select v-model:value="accountFormState.role">
+            <a-select-option value="">-请选择-</a-select-option>
+            <a-select-option value="'normal'">普通用户</a-select-option>
+            <a-select-option value="dev">开发</a-select-option>
+            <a-select-option value="test">测试</a-select-option>
+            <a-select-option value="admin">管理员</a-select-option>
+            <a-select-option value="supper">超级管理员</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="邮箱"> 
+          <a-input v-model:value="accountFormState.email" :rules="[{ required: true,  message: 'Please input your email!'}]"></a-input>
+        </a-form-item>
+        <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
+          <a-button type="primary" @click.prevent="onSubmit">确定</a-button>
+          <a-button style="margin-left: 10px" @click="onCancle">取消</a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 
 </template>
@@ -55,12 +87,16 @@ const layout = {
 const columns = [
   {
     title: '序号',
-    dataIndex: 'id',
+    dataIndex: 'index',
     width: 150,
   },
   {
     title: '账号',
     dataIndex: 'userName',
+  },
+  {
+    title: '角色',
+    dataIndex: 'roleName',
   },
   {
     title: '邮箱',
@@ -87,13 +123,20 @@ const columns = [
 ];
 const accountManage = ref(null);
 const visible = ref(false);
+const editAccountVisible = ref(false);
 
 const formState = reactive({
   userName: '',
   email: '',
   verifyState: 0
 });
+const accountFormState = reactive({
+  userName: '',
+  email: '',
+  role: ''
+});
 const formRef = ref(null);
+const accountFormRef = ref(null);
 const list = ref([]);
 
 onMounted(() => {
@@ -111,9 +154,11 @@ const getData = async () => {
     if (res.code === 200) {
       const data = res.data.rows;
       const now = new Date();
-      list.value = data.map((item) => ({
+      list.value = data.map((item, i) => ({
+        index: i + 1,
         id: item.id,
         userName: item.userName,
+        roleName: '普通用户',
         email: item.email,
         state: item.state,
         stateStr: getStateStrByState(item.state),
@@ -137,6 +182,10 @@ const getStateStrByState = (state) => {
     case 1:
       return '通过';
   }
+}
+
+const onEdit = (userName, email) => {
+  editAccountVisible.value = true;
 }
 
 const onVerify = (userName, email) => {

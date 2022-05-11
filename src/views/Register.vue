@@ -109,7 +109,7 @@ const onToLogin = () => {
     .user-interface-title {
       margin-top: 10%;
       margin-bottom: 10%;
-      color: #1e2126;
+      color: #fff;
       font-weight: 700;
       font-size: 30px;
       font-family: MicrosoftYaHei-Bold, inherit, sans-serif;

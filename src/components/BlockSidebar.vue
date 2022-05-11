@@ -8,7 +8,7 @@
       <img title="收藏夹" src="assets/images/collect.svg" />
       <span>{{ collectInfo.length }}</span>
     </button>
-    <button>
+    <button @click="showMessage">
       <img title="消息通知" src="assets/images/message.svg" />
       <span>0</span>
     </button>
@@ -19,8 +19,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, defineEmits } from 'vue';
 import store from '../store/index';
+const emits = defineEmits<{
+  (e: 'showMessage'): void
+}>();
 const shoppingInfo = computed(() => {
   return store.state.shoppingInfo;
 });
@@ -28,6 +31,10 @@ const shoppingInfo = computed(() => {
 const collectInfo = computed(() => {
   return store.state.collectInfo;
 });
+
+const showMessage = () => {
+  emits('showMessage');
+};
 </script>
 
 <style lang="less" scoped>

@@ -1,5 +1,6 @@
 <template>
   <div class="main-content" ref="prothesisListRef">
+    <operation-container @updateAddModel="addModel"></operation-container>
     <a-table
       style="height: 100%"
       :columns="columns"
@@ -24,7 +25,7 @@
 
     </a-modal>
 
-    <button v-drag @click="addModel" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">添加模型</button>
+    <!-- <button v-drag @click="addModel" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">添加模型</button> -->
 
     <a-modal v-model:visible="addModelVisible" title="账号审核" :footer="null" :get-container="prothesisListRef">
       <a-form
@@ -61,6 +62,7 @@
 import { message } from 'ant-design-vue';
 import { ref, defineComponent, onMounted, reactive } from 'vue';
 import ProthesisModel from './ProthesisModel.vue';
+import OperationContainer from './OperationContainer.vue';
 import { getProthesisList, deleteProthesis } from '../../service/prothesis';
 import store from '../../store/index';
 interface TreeDataItem {

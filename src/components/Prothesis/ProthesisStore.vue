@@ -1,5 +1,5 @@
 <template>
-  <div class="store-main">
+  <div class="store-main" ref="storeRef">
     <a-row :gutter="16">
       <a-col :span="4" v-for="item of arr" :key="item">
         <a-card hoverable >
@@ -21,14 +21,19 @@
       </a-col>
     </a-row>
 
-    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null" :get-container="store-main">
+    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null" :get-container="storeRef">
       <div style="height: 600px; width: 800px">
         <prothesis-model></prothesis-model>
       </div>
-
     </a-modal>
 
-    <block-sidebar></block-sidebar>
+    <a-modal :height="600" :width="800" wrapClassName="message-wrapper" destoryOnClose  v-model:visible="messageVisible" :closable="true" :footer="null" :get-container="storeRef">
+      <div style="height: 100%; width: 100%">
+        <message-center></message-center>
+      </div>
+    </a-modal>
+
+    <block-sidebar @showMessage="showMessage"></block-sidebar>
   </div>
 </template>
 
@@ -36,8 +41,11 @@
 import { ref, computed } from 'vue';
 import { EyeOutlined, ShoppingCartOutlined, StarOutlined } from '@ant-design/icons-vue';
 import BlockSidebar from '../BlockSidebar.vue';
+import MessageCenter from '../MessageCenter/MessageCenter.vue';
 import store from '../../store/index';
 const visible = ref(false);
+const messageVisible = ref(false);
+const storeRef = ref(null);
 const arr = ['假体1','假体2','假体3','假体4','假体5','假体6','假体7','假体8','假体1','假体2','假体3','假体4','假体5','假体6','假体7','假体8'];
 const shoppingInfo = computed(() => {
   return store.state.shoppingInfo;
@@ -58,6 +66,10 @@ const onAddShoppingCart = (item) => {
 const onAddCollect = (item) => {
   collectInfo.value.push(item);
 }
+
+const showMessage = () => {
+  messageVisible.value = true;
+};
 </script>
 
 <style lang="less" scoped>
@@ -67,8 +79,12 @@ const onAddCollect = (item) => {
   padding: 0 20px;
   overflow-y: auto;
   overflow-x: hidden;
-  :deep(.ant-modal-body) {
+  :deep(.model-wrapper .ant-modal-body) {
     padding: 0px;
+  }
+  :deep(.message-wrapper .ant-modal-body) {
+    height: 600px;
+    width: 800px;
   }
 }
 </style>

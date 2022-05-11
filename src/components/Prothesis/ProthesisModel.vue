@@ -47,7 +47,7 @@ const loadSTL = () => {
     mesh = new THREE.Mesh(geometry, material)
     mesh.rotation.x = -0.5 * Math.PI
     geometry.center()
-    mesh.scale.set(1.5, 1.5, 1.5)
+    mesh.scale.set(1, 1, 1)
     scene.add(mesh)
   })
 }
@@ -72,7 +72,7 @@ const createCamera = () => {
   const k = width / height // 窗口宽高比
   // PerspectiveCamera( fov, aspect, near, far )
   camera = new THREE.PerspectiveCamera(35, k, 0.1, 1000)
-  camera.position.set(250, 250, 150) // 设置相机位置
+  camera.position.set(0, 22, 240) // 设置相机位置
 
   camera.lookAt(new THREE.Vector3(10, 40, 0)) // 设置相机方向
   scene.add(camera)
@@ -84,7 +84,7 @@ const createCamera = () => {
 const createGrid = () => {
   const gridHelper = new THREE.GridHelper(2000, 100, 0x888888, 0x888888);
   gridHelper.position.x=0;
-  gridHelper.position.y=-22;
+  gridHelper.position.y=-14.5;
   gridHelper.position.z=0;
   scene.add(gridHelper);
 }

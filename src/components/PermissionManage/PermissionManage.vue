@@ -17,7 +17,7 @@
       </template>
     </a-table>
 
-    <a-modal wrapClassName="model-wrapper" title="新增菜单配置" v-model:visible="visible" :closable="false" :footer="null" :get-container="permissionRef">
+    <a-modal wrapClassName="model-wrapper" title="新增菜单配置" v-model:visible="visible" :closable="true" :footer="null" :get-container="permissionRef">
       <menu-config></menu-config>
     </a-modal>
 
@@ -86,7 +86,7 @@ const formState = reactive({
 const list = ref([]);
 
 const data =  [...Array(100)].map((_,i) => ({
-  id: i,
+  id: i + 1,
   menu: '登陆',
   submenu: '',
   path: './login',
