@@ -1,12 +1,18 @@
 <template>
   <div class="message-content">
     <div class="sender1">
-      <textarea class="message-list"></textarea>
+      <div class="message-list">
+        <message-item :role="'sender'" :content="'你吃饭了吗？'"></message-item>
+        <message-item :role="'reciever'" :content="'还没有，你呢？'"></message-item>
+        <message-item :role="'sender'" :content="'准备吃点啥？'"></message-item>
+        <message-item :role="'reciever'" :content="'蒸熊掌，蒸鹿尾儿，烧花鸭，烧雏鸡，烧子鹅，卤猪，卤鸭。'"></message-item>
+        <message-item :role="'sender'" :content="'雷霆嘎嘎？'"></message-item>
+      </div>
       <a-input class="message-input" v-model:value="value1"></a-input>
       <button class="send-btn" @click="onMessageSend1">发送</button>
     </div>
     <div class="sender2">
-      <textarea class="message-list"></textarea>
+      <div class="message-list"></div>
       <a-input class="message-input" v-model:value="value2"></a-input>
       <button class="send-btn" @click="onMessageSend1">发送</button>
     </div>
@@ -15,6 +21,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import MessageItem from './MessageItem.vue';
 let socketA, socketB;
 let offer, peerA;
 let answer, peerB;
@@ -133,6 +140,8 @@ const onMessageSend2 = () => {
       height: 230px;
       width: 100%;
       overflow: auto;
+      background: #cccccc70;
+      border: 1px solid #ccc
     }
     .message-input {
       width: calc(100% - 80px);
