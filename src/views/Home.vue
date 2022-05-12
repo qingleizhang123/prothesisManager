@@ -27,7 +27,7 @@ const currentTab = computed(() => {
   height: 100vh;
   .left {
     width: 160px;
-    background: #ccc;
+    background: #dbb17c;
   }
   .right {
     padding-top: 120px;

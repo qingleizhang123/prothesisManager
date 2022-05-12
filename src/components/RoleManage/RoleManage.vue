@@ -22,17 +22,18 @@
         v-bind="layout"
         name="nest-messages"
       >
-        <a-form-item :name="'roleName'" label="角色" :rules="[{ required: true,  message: 'Please input your rolename!'}]">
+        <a-form-item :name="'roleName'" label="角色名称" :rules="[{ required: true,  message: 'Please input your rolename!'}]">
           <a-input v-model:value="formState.roleName" />
         </a-form-item>
-        <a-form-item :name="'roleText'" label="文本" :rules="[{ required: true,  message: 'Please input your roletext!'}]">
-          <a-select v-model:value="formState.roleText">
+        <a-form-item :name="'roleText'" label="角色说明" :rules="[{ required: true,  message: 'Please input your roletext!'}]">
+          <a-input v-model:value="formState.roleText" />
+          <!-- <a-select v-model:value="formState.roleText">
             <a-select-option value="普通用户">普通用户</a-select-option>
             <a-select-option value="开发">开发</a-select-option>
             <a-select-option value="测试">测试</a-select-option>
             <a-select-option value="管理员">管理员</a-select-option>
             <a-select-option value="超级管理员">超级管理员</a-select-option>
-          </a-select>
+          </a-select> -->
         </a-form-item>
         <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
           <a-button type="primary" @click.prevent="onSubmit">确定</a-button>

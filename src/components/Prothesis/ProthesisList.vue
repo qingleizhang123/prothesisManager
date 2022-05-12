@@ -18,14 +18,14 @@
       </template>
     </a-table>
 
-    <a-modal :height="600" :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null" :get-container="prothesisListRef">
+    <a-modal :width="800" wrapClassName="model-wrapper" v-model:visible="visible" :closable="false" :footer="null" :get-container="prothesisListRef">
       <div style="height: 600px; width: 800px">
         <prothesis-model></prothesis-model>
       </div>
 
     </a-modal>
 
-    <!-- <button v-drag @click="addModel" style="position:absolute;top: 10px;left:200px;width:200px;height:30px;">添加模型</button> -->
+    <button v-drag @click="onConnect" style="position:absolute;top: 40px;right:20px;width:120px;height:30px;background:#eea977;">联系我</button>
 
     <a-modal v-model:visible="addModelVisible" title="账号审核" :footer="null" :get-container="prothesisListRef">
       <a-form
@@ -54,6 +54,10 @@
         </a-form-item>
       </a-form>
     </a-modal>
+
+    <a-modal :width="800" :height="600" v-model:visible="connectVisible" :footer="null" :get-container="prothesisListRef">
+      <video-connect :userid="2" :role="'reader'"></video-connect>
+    </a-modal>
   </div>
 
 </template>
@@ -64,6 +68,7 @@ import { ref, defineComponent, onMounted, reactive } from 'vue';
 import ProthesisModel from './ProthesisModel.vue';
 import OperationContainer from './OperationContainer.vue';
 import { getProthesisList, deleteProthesis } from '../../service/prothesis';
+import VideoConnect from '../MessageCenter/VideoConnect.vue';
 import store from '../../store/index';
 interface TreeDataItem {
   id: string | number;
@@ -116,6 +121,7 @@ const columns = [
 ];
 const visible = ref(false);
 const addModelVisible = ref(false);
+const connectVisible = ref(false);
 const formRef1 = ref(null);
 const formState = reactive({
   path: '',
@@ -160,15 +166,19 @@ const getData = async () => {
   } catch(err) {
       message.error('接口请求错误');
   }
-}
+};
 
 const onScanModel = () => {
   visible.value = true;
-}
+};
+
+const onConnect = () => {
+  connectVisible.value = true;
+};
 
 const onChangePage = (pagination) => {
   console.log(pagination);
-}
+};
 
 const onDelete = async (id: number) => {
   const param = {
@@ -186,11 +196,11 @@ const onDelete = async (id: number) => {
   } catch(err) {
       message.error('接口请求错误');
   }
-}
+};
 
 const addModel = () => {
   addModelVisible.value = true;
-}
+};
 
 const genTreeNode = (parentId: number, isLeaf = false): TreeDataItem => {
   const random = Math.random().toString(36).substring(2, 6);
@@ -202,6 +212,7 @@ const genTreeNode = (parentId: number, isLeaf = false): TreeDataItem => {
     isLeaf,
   };
 };
+
 const onLoadData = (treeNode: any) => {
   console.log(treeNode);
   return new Promise((resolve: (value?: unknown) => void) => {
@@ -217,7 +228,7 @@ const onSubmit = () => {
   formRef1.value.validate().then(() => {
     console.log(formState.model, formState.path);
   })
-}
+};
 
 </script>
 

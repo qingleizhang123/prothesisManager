@@ -27,7 +27,7 @@
       </div>
     </a-modal>
 
-    <a-modal :height="600" :width="800" wrapClassName="message-wrapper" @cancel="onCancel" :destoryOnClose="true"  v-model:visible="messageVisible" :closable="true" :footer="null" :get-container="storeRef">
+    <a-modal :height="600" :width="800" :title="'消息中心'" wrapClassName="message-wrapper" @cancel="onCancel" :destoryOnClose="true"  v-model:visible="messageVisible" :closable="true" :footer="null" :get-container="storeRef">
       <div style="height: 100%; width: 100%">
         <message-center></message-center>
       </div>

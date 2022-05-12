@@ -1,8 +1,8 @@
 <template>
-  <div class="main-content">
+  <div class="main-content" ref="deviceStatisticRef">
     <div class="header">
       <span>{{ time }}</span>
-      <a>更多</a>
+      <a @click="onConnect">更多</a>
     </div>
     <div class="search">
       <a-input-search
@@ -31,6 +31,10 @@
     <div class="chart3-container">
       <div id="chart4"></div>
     </div>
+
+    <a-modal :width="800" :height="600" v-model:visible="connectVisible" :footer="null" :get-container="deviceStatisticRef">
+      <video-connect :userid="1" :role="'sender'"></video-connect>
+    </a-modal>
   </div>
 </template>
 
@@ -38,8 +42,15 @@
 import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
 import { showTime } from '../../utils/showTime';
+import VideoConnect from '../MessageCenter/VideoConnect.vue';
 const searchValue = ref('');
 const time = ref(showTime());
+const connectVisible = ref(false);
+const deviceStatisticRef = ref(null);
+
+const onConnect = () => {
+  connectVisible.value = true;
+}
 
 setInterval(() => {
   const now = showTime();

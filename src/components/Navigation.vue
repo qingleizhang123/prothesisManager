@@ -106,10 +106,10 @@ ul {
     line-height: 60px;
   }
   li:hover {
-    background: #04856f;
+    background: #e18a4b;
   }
 }
 .select {
-  background: #04856f;
+  background: #e18a4b;
 }
 </style>
