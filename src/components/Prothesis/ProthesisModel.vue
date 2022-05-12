@@ -6,7 +6,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
-import { defineComponent, onMounted, ref, reactive, toRefs, unref } from 'vue';
+import { defineProps, onMounted, ref, reactive, toRefs, unref } from 'vue';
+const props = defineProps<{
+  modelPath: ''
+}>();
 
 // 声明场景
 let scene: any
@@ -27,7 +30,7 @@ const init = () => {
   loadSTL() // 加载STL模型
   createLight() // 创建光源
   createCamera() // 创建相机
-  createGrid() // 创建网格
+  // createGrid() // 创建网格
   createRender() // 创建渲染器
   createControls() // 创建控件对象
   render() // 渲染
@@ -41,7 +44,8 @@ const createScene = () => {
 // 加载STL模型
 const loadSTL = () => {
   const loader = new STLLoader()
-  loader.load(`./demo.stl`, (geometry) => {
+  console.log(props.modelPath,'111');
+  loader.load(`${props.modelPath}`, (geometry) => {
     // 创建材质
     const material = new THREE.MeshLambertMaterial({ color: 0x7777ff })
     mesh = new THREE.Mesh(geometry, material)
@@ -77,7 +81,7 @@ const createCamera = () => {
   camera.lookAt(new THREE.Vector3(10, 40, 0)) // 设置相机方向
   scene.add(camera)
 
-  
+
 }
 
 // 创建底部网格
