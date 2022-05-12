@@ -38,8 +38,8 @@ const createClient = () => {
 };
 
 const closeClient = () => {
-  socketA.onclose();
-  socketB.onclose();
+  socketA.close();
+  socketB.close();
 };
 
 // 订阅消息

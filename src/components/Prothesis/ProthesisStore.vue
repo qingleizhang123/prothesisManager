@@ -27,7 +27,7 @@
       </div>
     </a-modal>
 
-    <a-modal :height="600" :width="800" wrapClassName="message-wrapper" destoryOnClose  v-model:visible="messageVisible" :closable="true" :footer="null" :get-container="storeRef">
+    <a-modal :height="600" :width="800" wrapClassName="message-wrapper" @cancel="onCancel" :destoryOnClose="true"  v-model:visible="messageVisible" :closable="true" :footer="null" :get-container="storeRef">
       <div style="height: 100%; width: 100%">
         <message-center></message-center>
       </div>
@@ -42,6 +42,7 @@ import { ref, computed } from 'vue';
 import { EyeOutlined, ShoppingCartOutlined, StarOutlined } from '@ant-design/icons-vue';
 import BlockSidebar from '../BlockSidebar.vue';
 import MessageCenter from '../MessageCenter/MessageCenter.vue';
+import { Modal } from 'ant-design-vue';
 import store from '../../store/index';
 const visible = ref(false);
 const messageVisible = ref(false);
@@ -69,6 +70,10 @@ const onAddCollect = (item) => {
 
 const showMessage = () => {
   messageVisible.value = true;
+};
+
+const onCancel = () => {
+  Modal.destroyAll();
 };
 </script>
 
