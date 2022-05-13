@@ -1,6 +1,6 @@
 <template>
   <div class="user-content">
-    <img src="assets/images/avatar.jpg"/>
+    <img src="assets/images/default.svg"/>
     <div class="user">
       <span class="userName">{{ userName }}</span>
       <span style="margin-left: 5px">您好！</span>
@@ -106,10 +106,10 @@ ul {
     line-height: 60px;
   }
   li:hover {
-    background: #e18a4b;
+    background: #04856f;
   }
 }
 .select {
-  background: #e18a4b;
+  background: #04856f;
 }
 </style>

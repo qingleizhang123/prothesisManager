@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
     path: '/home',
     component: Home,
     meta: {
-      title: '假体管理系统',
+      title: '假体器械管理系统',
       btnPermissions: ['admin', 'supper']
     }
   },

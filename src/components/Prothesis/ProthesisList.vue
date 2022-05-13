@@ -5,7 +5,7 @@
       style="height: 100%"
       :columns="columns"
       :data-source="list"
-      :pagination="{ pageSize: 20 }"
+      :pagination="{ pageSize: 10 }"
       :scroll="{ y: 605 }"
       @change="onChangePage($event)"
       >
@@ -25,7 +25,7 @@
 
     </a-modal>
 
-    <button v-drag @click="onConnect" style="position:absolute;top: 40px;right:20px;width:120px;height:30px;background:#eea977;">联系我</button>
+    <button v-drag @click="onConnect" style="position:absolute;top: 40px;right:20px;width:120px;height:30px;">联系我</button>
 
     <a-modal v-model:visible="addModelVisible" title="账号审核" :footer="null" :get-container="prothesisListRef">
       <a-form

@@ -1,6 +1,9 @@
 <template>
   <div class="menu-content">
     <a-form ref="formRef" :model="dynamicValidateForm" v-bind="layout">
+      <a-form-item :name="'menuName'" :label="'菜单名'">
+        <a-input></a-input>
+      </a-form-item>
       <a-form-item
         v-for="(domain, index) in dynamicValidateForm.domains"
         :key="domain.key"
@@ -28,8 +31,14 @@
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
         <a-button type="dashed" style="width: 80%" @click="addDomain">
           <PlusOutlined />
-          增加子菜单
+          增加父级菜单
         </a-button>
+      </a-form-item>
+      <a-form-item :name="'route'" :label="'路由配置'">
+        <a-input></a-input>
+      </a-form-item>
+      <a-form-item :name="'component'" :label="'组件名'">
+        <a-input></a-input>
       </a-form-item>
       <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
         <a-button type="primary" html-type="submit" @click="submitForm">添加</a-button>

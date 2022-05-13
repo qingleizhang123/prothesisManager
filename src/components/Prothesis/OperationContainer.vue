@@ -36,7 +36,6 @@ const onSearch = () => {
   button {
     width: 100px;
     height: 100%;
-    background: #eea977;
   }
   .search {
     width: 200px;

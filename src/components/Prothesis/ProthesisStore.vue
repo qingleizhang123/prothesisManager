@@ -1,13 +1,13 @@
 <template>
   <div class="store-main" ref="storeRef">
     <a-row :gutter="16">
-      <a-col :span="4" v-for="item of data" :key="item.id">
+      <a-col :span="4" v-for="item of list" :key="item.id">
         <a-card hoverable >
           <template #cover>
             <img
               alt="example"
               style="height: 150px"
-              src="assets/images/avatar.jpg"
+              :src="item.imgPath"
             />
           </template>
           <template #actions>
@@ -51,7 +51,6 @@ const messageVisible = ref(false);
 const storeRef = ref(null);
 const list = ref(new Array<ProthesisInfo>());
 const modelPath = ref('');
-const arr = ['假体1','假体2','假体3','假体4','假体5','假体6','假体7','假体8','假体1','假体2','假体3','假体4','假体5','假体6','假体7','假体8'];
 const shoppingInfo = computed(() => {
   return store.state.shoppingInfo;
 })
@@ -64,41 +63,6 @@ const onShowProthesis = (path: string) => {
   visible.value = true;
   modelPath.value = path;
 }
-
-const data = new Array<ProthesisInfo>();
-data.push({
-  index: 1,
-  id: 1,
-  name: '臼杯',
-  type: 1,
-  factory: 1,
-  tag: '标签',
-  description: '这是臼杯假体1',
-  imgPath: 'assets/images/prothesis1.jpg',
-  modelPath: './stl/model1.stl'
-})
-data.push({
-  index: 2,
-  id: 2,
-  name: '球头',
-  type: 1,
-  factory: 1,
-  tag: '标签',
-  description: '这是球头假体1',
-  imgPath: 'assets/images/prothesis2.jpg',
-  modelPath: './stl/model2.stl'
-})
-data.push({
-  index: 3,
-  id: 3,
-  name: '股骨柄',
-  type: 1,
-  factory: 1,
-  tag: '标签',
-  description: '这是股骨柄假体1',
-  imgPath: 'assets/images/prothesis3.jpg',
-  modelPath: './stl/model3.stl'
-})
 
 onMounted(() => {
   getData();
@@ -122,7 +86,8 @@ const getData = async () => {
         factory: item.prothesisFactory,
         tag: item.tag,
         description: item.description,
-        assembly: item.assemblyPoint
+        imgPath: `assets/images/${item.prothesisName}.png`,
+        modelPath: './stl/model1.stl'
       }))
     } else {
       message.error('假体列表获取失败');

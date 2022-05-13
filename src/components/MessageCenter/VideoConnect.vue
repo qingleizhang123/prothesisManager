@@ -95,7 +95,7 @@ const createConnect = () => {
         let message = value[1];
         console.log(message, 'value1');
         messageList.value.push({
-          userid: recieveid,
+          userid: Number(recieveid),
           role: 'reciever',
           constent: message
         });
@@ -145,9 +145,7 @@ const peerInit = async usid => {
   offer = await peer.createOffer()
   // 4. 发送 SDP
   socket.send(`offer|${usid}|${offer.sdp}`)
-}
 
-if (peer && props.role === 'sender') {
   peer.onicecandidate = event => {
     if (event.candidate) {
       let candid = event.candidate.toJSON()
