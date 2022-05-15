@@ -2,9 +2,9 @@
   <div class="main">
     <div class="container">
       <div class="video-box">
-        <video id="remote-video"></video>
-        <video id="local-video" muted></video>
-        <button class="start" @click="start()">
+        <video id="remote-video" autoplay controls></video>
+        <video id="local-video" autoplay controls muted></video>
+        <button v-if="startVisible" class="start" @click="start()">
           {{ label }}
         </button>
       </div>
@@ -20,11 +20,11 @@
     </div>
     </div>
   </div>
-  
+
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, onMounted } from 'vue'; 
+import { ref, defineProps, onMounted } from 'vue';
 import MessageItem from '../MessageCenter/MessageItem.vue';
 interface MessageItem {
   userid: number,
@@ -36,11 +36,12 @@ const props = defineProps<{
   role: ''
 }>();
 let value = ref('');
+const startVisible = ref(true);
 const messageList = ref(new Array<MessageItem>());
 
 const label = props.role === 'sender' ? '打开视频' : '加入视频';
 
-let socket, offer, peer, localStream, answer, el, button, recieveid;
+let socket, offer, peer, localStream, answer, el, button, recieveid, localVideo, remoteVideo;
 
 const message =  {
   log (msg) {
@@ -54,8 +55,8 @@ const message =  {
 const target = props.role;
 
 onMounted(() => {
-  const localVideo = document.querySelector('#local-video');
-  const remoteVideo = document.querySelector('#remote-video');
+  localVideo = document.querySelector('#local-video');
+  remoteVideo = document.querySelector('#remote-video');
   button = document.querySelector('.start');
   el = document.querySelector('.logger');
   localVideo.onloadeddata = () => {
@@ -64,6 +65,7 @@ onMounted(() => {
   }
   remoteVideo.onloadeddata = () => {
     message.log('播放对方视频');
+    startVisible.value = false;
     remoteVideo.play();
   }
 
@@ -78,18 +80,23 @@ const createConnect = () => {
       let string = evt.data
       let value = string.split('|')
       if (value[0] == 'join') {
-        // peerInit(value[1]);
+        peerInit(value[1]);
         recieveid = value[1];
         message.log(`用户${recieveid}已加入房间！`);
         socket.send(`join|${recieveid}|成功加入视频房间${props.userid}`);
       }
       if (value[0] == 'answer') {
-        let answer = new RTCSessionDescription({
+        answer = new RTCSessionDescription({
           type: 'answer',
           sdp: value[2]
         })
         peer.setLocalDescription(offer)
         peer.setRemoteDescription(answer)
+      }
+      if (value[0] == 'candid') {
+        let json = JSON.parse(value[2])
+        let candid = new RTCIceCandidate(json)
+        peer.addIceCandidate(candid)
       }
       if (value[0] == 'message') {
         let message = value[1];
@@ -102,7 +109,7 @@ const createConnect = () => {
       }
     }
   } else {
-    socket.onmessage = evt => { 
+    socket.onmessage = evt => {
       let string = evt.data
       let value = string.split('|')
       if (value[0] == 'join') {
@@ -113,7 +120,7 @@ const createConnect = () => {
         transMedia(value)
       }
       if (value[0] == 'candid') {
-        let json = JSON.parse(value[1])
+        let json = JSON.parse(value[2])
         let candid = new RTCIceCandidate(json)
         peer.addIceCandidate(candid)
       }
@@ -131,8 +138,8 @@ const createConnect = () => {
 };
 
 const peerInit = async usid => {
-  // 1. 创建连接
-  peer = new RTCPeerConnection()
+  // 1.新建连接
+  peer = new RTCPeerConnection();
   // 2. 添加视频流轨道
 
   message.log(`------ WebRTC ${target === 'sender' ? '发起方' : '接收方'}流程开始 ------`);
@@ -141,41 +148,81 @@ const peerInit = async usid => {
   localStream.getTracks().forEach(track => {
     peer.addTrack(track, localStream)
   })
+
+  peer.ontrack = e => {
+    if (e && e.streams) {
+      message.log('收到对方音频/视频流数据...');
+      remoteVideo.srcObject = e.streams[0];
+    }
+  };
+
+  peer.onconnectionstatechange = event => {
+    if (peer.connectionState === 'connected') {
+      message.log('对等连接成功！')
+    }
+    if (peer.connectionState === 'disconnected') {
+      message.log('连接已断开！')
+    }
+  }
+
   // 3. 创建 SDP
   offer = await peer.createOffer()
   // 4. 发送 SDP
   socket.send(`offer|${usid}|${offer.sdp}`)
 
-  peer.onicecandidate = event => {
-    if (event.candidate) {
-      let candid = event.candidate.toJSON()
-      socket.send(`candid|${usid}|${JSON.stringify(candid)}`)
-    }
-  };
 }
 
 const transMedia = async arr => {
   let [_, roomid, sdp] = arr
-  let offer = new RTCSessionDescription({ type: 'offer', sdp })
-  peer = new RTCPeerConnection()
+  offer = new RTCSessionDescription({ type: 'offer', sdp })
+  peer = new RTCPeerConnection();
+
+  localStream.getTracks().forEach(track => {
+    peer.addTrack(track, localStream);
+  });
+
+  peer.ontrack = e => {
+    if (e && e.streams) {
+      message.log('收到对方音频/视频流数据...');
+      remoteVideo.srcObject = e.streams[0];
+    }
+  };
+
+  peer.onicecandidate = event => {
+    if (event.candidate) {
+      let candid = event.candidate.toJSON()
+      socket.send(`candid|${recieveid}|${JSON.stringify(candid)}`)
+    }
+  };
+
+  peer.onconnectionstatechange = event => {
+    if (peer.connectionState === 'connected') {
+      console.log('对等连接成功！')
+    }
+    if (peer.connectionState === 'disconnected') {
+      console.log('连接已断开！')
+    }
+  }
+
   await peer.setRemoteDescription(offer)
-  let answer = await peer.createAnswer()
+  answer = await peer.createAnswer()
   await peer.setLocalDescription(answer)
   socket.send(`answer|${roomid}|${answer.sdp}`)
+
+
 }
 
 const start = async () => {
-  if (props.role === 'sender') {
-    try {
-      message.log('尝试调取本地摄像头/麦克风');
-      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      message.log('摄像头/麦克风获取成功！');
-      localVideo.srcObject = localStream;
-    } catch {
-      message.error('摄像头/麦克风获取失败！');
-      return;
-    }
-  } else {
+  try {
+    message.log('尝试调取本地摄像头/麦克风');
+    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    message.log('摄像头/麦克风获取成功！');
+    localVideo.srcObject = localStream;
+
+  } catch {
+    message.error('摄像头/麦克风获取失败！');
+  }
+  if (props.role == 'reader') {
     message.log('尝试加入视频房间');
     socket.send(`join|1`);
   }
@@ -257,7 +304,7 @@ const startLive = async (offerSdp) => {
     message.log('创建本地SDP');
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
-    
+
     message.log(`传输发起方本地SDP`);
     socket.send(JSON.stringify(offer));
   } else {

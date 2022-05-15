@@ -33,6 +33,11 @@
           </a-input-password>
         </a-form-item>
 
+        <a-form-item :name="'verifycode'" label="验证码" :rules="[{ required: true, len: 4, message: '请输入正确的验证码!', trigger: 'blur' }]">
+          <a-input class="verifycode-input" v-model:value="formState.verifycode"/>
+          <verify-code v-model:changeCode="identifyCode" :contentWidth="100" :contentHeight="32"></verify-code>
+        </a-form-item>
+
         <div class="login-form-wrap">
           <a-form-item  :wrapper-col="{ ...layout.wrapperCol, offset: 6 }" name="remember" no-style>
             <a-checkbox v-model:checked="formState.remember">记住密码</a-checkbox>
@@ -49,13 +54,14 @@
       </a-form>
     </div>
   </div>
-  
+
 </template>
 
 <script lang="ts" setup>
 import { ref, defineComponent, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
+import VerifyCode from '../components/VerifyCode.vue';
 import { accountLogin } from '@/service/login';
 import { message } from 'ant-design-vue';
 const layout = {
@@ -66,6 +72,7 @@ interface FormState {
   username: string;
   password: string;
   remember: boolean;
+  verifyCode: string;
 }
 const router = useRouter();
 const formRef = ref(null);
@@ -76,9 +83,15 @@ const formState = reactive<FormState>({
   username: '',
   password: '',
   remember: true,
+  verifyCode: ''
 });
+let identifyCode = ref('');
 
 const handleSubmit = () => {
+  if (formState.verifycode !== identifyCode.value) {
+    message.error("验证码错误");
+    return;
+  }
   formRef.value.validate().then(async () => {
     const param = {
       userName: formState.username,
@@ -127,6 +140,9 @@ const onToRegister = () => {
     font-size: 30px;
     font-family: MicrosoftYaHei-Bold, inherit, sans-serif;
     text-align: center;
+  }
+  .verifycode-input {
+    width: calc(100% - 100px);
   }
   :deep(.ant-form) {
     color: #fff;
