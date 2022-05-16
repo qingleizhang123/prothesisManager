@@ -17,7 +17,7 @@ export function accountRegister(params) {
   const spark = new SparkMD5();
   spark.append(params.password);
   params.password = spark.end();
-  return request(`/user/create`, {
+  return request(`/user/register`, {
     method: 'post',
     data: params,
   });

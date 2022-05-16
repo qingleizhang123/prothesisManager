@@ -41,7 +41,8 @@ const messageList = ref(new Array<MessageItem>());
 
 const label = props.role === 'sender' ? '打开视频' : '加入视频';
 
-let socket, offer, peer, localStream, answer, el, button, recieveid, localVideo, remoteVideo;
+let socket, offer, peer, localStream, answer, el, recieveid, localVideo, remoteVideo;
+const peers = [];
 
 const message =  {
   log (msg) {
@@ -57,7 +58,6 @@ const target = props.role;
 onMounted(() => {
   localVideo = document.querySelector('#local-video');
   remoteVideo = document.querySelector('#remote-video');
-  button = document.querySelector('.start');
   el = document.querySelector('.logger');
   localVideo.onloadeddata = () => {
     message.log('播放本地视频');
@@ -86,12 +86,15 @@ const createConnect = () => {
         socket.send(`join|${recieveid}|成功加入视频房间${props.userid}`);
       }
       if (value[0] == 'answer') {
+        const index = peers.findIndex(row => row.id === value[1]);
         answer = new RTCSessionDescription({
           type: 'answer',
           sdp: value[2]
         })
-        peer.setLocalDescription(offer)
-        peer.setRemoteDescription(answer)
+        if (index >= 0) {
+          peers[index].setLocalDescription(offer)
+          peers[index].setRemoteDescription(answer)
+        }
       }
       if (value[0] == 'candid') {
         let json = JSON.parse(value[2])
@@ -138,7 +141,7 @@ const createConnect = () => {
 };
 
 const peerInit = async usid => {
-  // 1.新建连接
+  // 1. 创建连接
   peer = new RTCPeerConnection();
   // 2. 添加视频流轨道
 
@@ -170,6 +173,8 @@ const peerInit = async usid => {
   // 4. 发送 SDP
   socket.send(`offer|${usid}|${offer.sdp}`)
 
+  // 5. 保存连接
+  peers.push({usid, peer});
 }
 
 const transMedia = async arr => {
@@ -208,8 +213,6 @@ const transMedia = async arr => {
   answer = await peer.createAnswer()
   await peer.setLocalDescription(answer)
   socket.send(`answer|${roomid}|${answer.sdp}`)
-
-
 }
 
 const start = async () => {
