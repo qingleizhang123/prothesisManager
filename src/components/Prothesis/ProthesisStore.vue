@@ -15,7 +15,7 @@
             <shopping-cart-outlined alt="加入购物车" key="shoppingcart" @click="onAddShoppingCart(item)"/>
             <star-outlined alt="收藏" key="star" @click="onAddCollect(item)"/>
           </template>
-          <a-card-meta :title="item.name" :description="item.description">
+          <a-card-meta :title="item.type" :description="item.description">
           </a-card-meta>
         </a-card>
       </a-col>
@@ -42,7 +42,7 @@ import { ref, computed, onMounted } from 'vue';
 import { EyeOutlined, ShoppingCartOutlined, StarOutlined } from '@ant-design/icons-vue';
 import BlockSidebar from '../BlockSidebar.vue';
 import MessageCenter from '../MessageCenter/MessageCenter.vue';
-import { getProthesisList, deleteProthesis } from '../../service/prothesis';
+import { getProthesisList, deleteProthesis, getProthesisListAll } from '../../service/prothesis';
 import { Modal, message } from 'ant-design-vue';
 import { ProthesisInfo } from '../../utils/interface';
 import store from '../../store/index';
@@ -69,11 +69,7 @@ onMounted(() => {
 });
 
 const getData = async () => {
-  const param = {
-    page: 1,
-    pageSize: 20
-  }
-  const res: any = await getProthesisList(param);
+  const res: any = await getProthesisListAll();
 
   try {
     if (res.code === 200) {
@@ -81,12 +77,13 @@ const getData = async () => {
       list.value = data.map((item, i) => ({
         index: i + 1,
         id: item.id,
-        name: item.prothesisName,
-        type: item.prothesisType,
-        factory: item.prothesisFactory,
-        tag: item.tag,
-        description: item.description,
-        imgPath: `assets/images/${item.prothesisName}.png`,
+        type: item.type,
+        factory: item.factory,
+        size: item.size,
+        modelNum: item.modelNum,
+        tag: item?.tag,
+        description: item?.description,
+        imgPath: `assets/images/${item.type}.png`,
         modelPath: './stl/model1.stl'
       }))
     } else {

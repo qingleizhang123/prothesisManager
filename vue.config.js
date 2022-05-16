@@ -1,4 +1,7 @@
 const CompresssionPlugin = require('compression-webpack-plugin');
+const SC_URL = 'http://10.5.61.46:10087'; // qiang.shen
+const BS_URL = 'http://localhost:3000'; // qinglei.zhang
+
 module.exports = {
   lintOnSave: false,
   outputDir: 'dist', // 构建输出目录
@@ -15,7 +18,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://localhost:3000', // 这里后台的地址模拟的;应该填写你们真实的后台接口
+        target: SC_URL, // 这里后台的地址模拟的;应该填写你们真实的后台接口
         changOrigin: true, // 允许跨域
         pathRewrite: {
           '^/api': '/api' // 重写,

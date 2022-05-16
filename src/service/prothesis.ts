@@ -23,3 +23,10 @@ export function deleteProthesis(params) {
     data: params
   });
 }
+
+// 获取假体列表
+export function getProthesisListAll() {
+  return request(`/prothesis/list`, {
+    method: 'get'
+  });
+}

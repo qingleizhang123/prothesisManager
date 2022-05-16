@@ -67,7 +67,7 @@ import { message } from 'ant-design-vue';
 import { ref, defineComponent, onMounted, reactive } from 'vue';
 import ProthesisModel from './ProthesisModel.vue';
 import OperationContainer from './OperationContainer.vue';
-import { getProthesisList, deleteProthesis } from '../../service/prothesis';
+import { getProthesisList, deleteProthesis, getProthesisListAll } from '../../service/prothesis';
 import VideoConnect from '../MessageCenter/VideoConnect.vue';
 import store from '../../store/index';
 interface TreeDataItem {
@@ -89,12 +89,16 @@ const columns = [
     width: 150,
   },
   {
-    title: '假体名称',
-    dataIndex: 'name',
-  },
-  {
     title: '假体类型',
     dataIndex: 'type',
+  },
+  {
+    title: '假体型号',
+    dataIndex: 'modelNum',
+  },
+  {
+    title: '假体规格',
+    dataIndex: 'size',
   },
   {
     title: '假体厂商',
@@ -102,7 +106,11 @@ const columns = [
   },
   {
     title: '假体装配点',
-    dataIndex: 'assembly'
+    dataIndex: 'assemblyPoint',
+  },
+  {
+    title: '模型路径',
+    dataIndex: 'stlPath'
   },
   {
     title: '标签',
@@ -116,7 +124,7 @@ const columns = [
     title: '操作',
     key: 'operation',
     slots: { customRender: 'action' },
-    width: 300,
+    width: 200,
   },
 ];
 const visible = ref(false);
@@ -141,24 +149,22 @@ onMounted(() => {
 });
 
 const getData = async () => {
-  const param = {
-    page: 1,
-    pageSize: 20
-  }
-  const res: any = await getProthesisList(param);
+  const res: any = await getProthesisListAll();
 
   try {
     if (res.code === 200) {
       const data = res.data.rows;
       list.value = data.map((item, i) => ({
         index: i + 1,
-        id: item.id,
-        name: item.prothesisName,
-        type: item.prothesisType,
-        factory: item.prothesisFactory,
-        tag: item.tag,
-        description: item.description,
-        assembly: item.assemblyPoint
+        id: item.prothesisId,
+        type: item.type,
+        factory: item.factory,
+        size: item.size,
+        modelNum: item.modelNum,
+        stlPath: item.stlPath,
+        assemblyPoint: '',
+        tag: '',
+        description: ''
       }))
     } else {
       message.error('假体列表获取失败');
