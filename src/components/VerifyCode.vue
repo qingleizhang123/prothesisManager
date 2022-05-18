@@ -1,11 +1,11 @@
 <template>
-  <span class="s-canvas" @click="changeCode">
-    <canvas id="s-canvas" :width="props.contentWidth" :height="props.contentHeight"></canvas>
+  <span class="canvas-container" @click="changeCode">
+    <canvas id="code-canvas" :width="props.contentWidth" :height="props.contentHeight"></canvas>
   </span>
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, watch, computed, onMounted } from 'vue';
+import { ref, defineProps, watch, computed, onMounted, defineExpose } from 'vue';
 interface Props {
   identifyCodes: string,
   fontSizeMin: number,
@@ -58,7 +58,7 @@ const randomColor = (min, max) => {
 }
 
 const drawPic = () => {
-  let canvas = document.getElementById("s-canvas");
+  let canvas = document.getElementById("code-canvas");
   let ctx = canvas.getContext("2d");
   ctx.textBaseline = "bottom";
   // 绘制背景
@@ -134,12 +134,16 @@ const makeCode = (e, n) => {
   emits("update:changeCode", identifyCode.value);
 }
 
+defineExpose({
+  changeCode
+});
+
 </script>
 
 <style lang="less" scoped>
-.s-canvas {
+.canvas-container {
   vertical-align: top;
-  #s-canvas {
+  #code-canvas {
     vertical-align: top;
   }
 }

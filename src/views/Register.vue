@@ -19,7 +19,7 @@
         </a-form-item>
         <a-form-item :name="'verifycode'" label="验证码" :rules="[{ required: true, len: 4, message: '请输入正确的验证码!', trigger: 'blur' }]">
           <a-input class="verifycode-input" v-model:value="formState.verifycode"/>
-          <verify-code v-model:changeCode="identifyCode" :contentWidth="100" :contentHeight="32"></verify-code>
+          <verify-code ref="verifyCodeRef" v-model:changeCode="identifyCode" :contentWidth="100" :contentHeight="32"></verify-code>
         </a-form-item>
         <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 6 }">
           <a-button type="primary" style="width: 100%" html-type="submit" @click="onRegister">注册</a-button>
@@ -49,6 +49,7 @@ const layout = {
   wrapperCol: { span: 14 },
 };
 let identifyCode = ref('');
+const verifyCodeRef = ref('');
 const formRef = ref(null);
 const router = useRouter();
 
@@ -63,6 +64,7 @@ const onRegister = () => {
   formRef.value.validate().then(async () => {
     if (formState.verifycode !== identifyCode.value) {
       message.error("验证码错误");
+      verifyCodeRef.value.changeCode();
       return;
     }
     const param = {
